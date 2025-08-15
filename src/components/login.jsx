@@ -1,40 +1,37 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 export default function Login() {
+  
+  
+  const navigate = useNavigate();
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
 
 
   // const location = useLocation();
   // console.log(location.state);
-
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-
-  // Recupera os dados do Forms do localStorage
   useEffect(() => {
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-
-    if (usuario) {
-      setNome(usuario.nome);
-      setEmail(usuario.email);
-      console.log("Dados recuperados do localStorage:", usuario);
-    } else {
-      console.log("Nenhum usuário salvo no localStorage");
-    }
-  }, []);
-
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  if (usuario) {
+    setNome(usuario.nome);
+    setEmail(usuario.email);
+    console.log("Dados recuperados do localStorage:", usuario);
+  } else {
+    console.log("Nenhum usuário salvo no localStorage");
+  }
+ }, []);
 
    // Função do botão Entrar
   const handleLogin = () => {
-    if (nome && email) {
-      alert(`Bem-vindo, ${nome}!`);
-      // Aqui você pode redirecionar para outra página se quiser
-    } else {
-      alert("Preencha todos os campos!");
-    }
+  if (nome && email) {
+    // alert(`Bem-vindo, ${nome}!`);
+    navigate("/home"); // Vai para Home
+  } else {
+    alert("Preencha todos os campos!");
+  }
   };
-
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-pink-100 p-4">

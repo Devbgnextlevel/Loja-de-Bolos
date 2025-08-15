@@ -9,19 +9,15 @@ export default function Forms() {
    const [nome, setNome] = useState("");
    const [email, setEmail] = useState("");
 
-  const handleEnviar = () => {
-    // Aqui você pode validar os dados antes de redirecionar
-    // alert("Formulário enviado com sucesso!");
+ const handleEnviar = () => {
+  if (nome && email) {
     localStorage.setItem("usuario", JSON.stringify({ nome, email }));
     console.log("Formulário enviado com sucesso!", { nome, email });
-    if (email && nome) {
-      navigate("/"); // vai para login
-      // navigate("/", { state: { email, nome } });
-    } else {
-      alert("Preencha todos os campos!");
-    }
-  };
-
+    navigate("/"); // Vai para a rota do Login
+  } else {
+    alert("Preencha todos os campos!");
+  }
+};
   //  const handleSubmit = (e) => {
   //    e.preventDefault();
   //    const { Nome, email, telefone } = e.target.elements;
