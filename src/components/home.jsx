@@ -14,7 +14,7 @@ export default function Home() {
 
   const [bolos] = useState([
     { id: 1, nome: "Bolo de Chocolate", preco: 59.9, img: "https://via.placeholder.com/300x200?text=Chocolate" },
-    { id: 2, nome: "Bolo de Morango", preco: 64.9, img: "https://via.placeholder.com/300x200?text=Morango" },
+    { id: 2, nome: "Bolo de Morango", preco: 64.9, imxg: "https://via.placeholder.com/300x200?text=Morango" },
     { id: 3, nome: "Bolo de Limão", preco: 54.9, img: "https://via.placeholder.com/300x200?text=Limao" },
     { id: 4, nome: "Bolo de Cenoura", preco: 49.9, img: "https://via.placeholder.com/300x200?text=Cenoura" },
     { id: 5, nome: "Bolo Red Velvet", preco: 69.9, img: "https://via.placeholder.com/300x200?text=Red+Velvet" },
@@ -61,13 +61,13 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-[#C8A2C8] relative">
+    <div className="min-h-screen bg-[#ffcbff] relative">
       {/* Navbar */}
-      <header className="bg-[#D89CAB] shadow p-4 flex justify-between items-center sticky top-0 z-50">
+      <header className="bg-[#ffb2c5] shadow p-4 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-bold text-[#4B2E83]">Ju Doces</h1>
           <button
-            className="sm:hidden p-2 rounded hover:bg-[#F5E1A4]"
+            className="sm:hidden p-2 rounded hover:bg-[#fff5d9]"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <Menu size={24} />
@@ -75,7 +75,7 @@ export default function Home() {
         </div>
 
         {/* Campo de busca */}
-        <div className="hidden sm:flex items-center bg-[#F5E1A4] rounded-lg px-3 py-1 w-1/3">
+        <div className="hidden sm:flex items-center bg-[#fff6dc] rounded-lg px-3 py-1 w-1/3">
           <Search className="text-[#4B2E83] mr-2" size={18} />
           <input
             type="text"
@@ -91,27 +91,27 @@ export default function Home() {
           <button onClick={handleCartClick} className="p-2 rounded-full hover:bg-[#F5E1A4] relative">
             <ShoppingCart size={24} className="text-[#4B2E83]" />
             {carrinhoCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#F4C2C2] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              <span className="absolute -top-1 -right-1 bg-[#ffbdbd] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                 {carrinhoCount}
               </span>
             )}
           </button>
           <button onClick={handleLogout} className="p-2 rounded-full hover:bg-[#F5E1A4]">
-            <LogOut size={24} className="text-[#F4C2C2]" />
+            <LogOut size={24} className="text-[#ee9393]" />
           </button>
         </div>
       </header>
 
       {/* Menu mobile */}
       {menuOpen && (
-        <div className="sm:hidden bg-[#D89CAB] shadow p-4 space-y-2">
+        <div className="sm:hidden bg-[#ffa0b7] shadow p-4 space-y-2">
           <p className="text-[#4B2E83] font-semibold">{nome}</p>
           <p className="text-[#4B2E83]">{email}</p>
           <div className="flex space-x-2">
-            <button onClick={handleCartClick} className="flex-1 bg-[#F4C2C2] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
+            <button onClick={handleCartClick} className="flex-1 bg-[#ffb5b5] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
               Carrinho
             </button>
-            <button onClick={handleLogout} className="flex-1 bg-[#F4C2C2] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
+            <button onClick={handleLogout} className="flex-1 bg-[#ffb4b4] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
               Sair
             </button>
           </div>
@@ -121,7 +121,7 @@ export default function Home() {
       {/* Boas-vindas */}
       <div className="text-center py-4 px-2 sm:px-4">
         <h2 className="text-xl font-semibold text-[#4B2E83]">{nome}</h2>
-        <p className="text-[#D89CAB]">{email}</p>
+        <p className="text-[#ffaac0]">{email}</p>
       </div>
 
       {/* Vitrine de bolos */}
@@ -129,17 +129,17 @@ export default function Home() {
         {filteredBolos.map((bolo) => (
           <div
             key={bolo.id}
-            className="bg-[#D89CAB] rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col"
+            className="bg-[#ffb8ca] rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col"
           >
             <img src={bolo.img} alt={bolo.nome} className="w-full h-40 object-cover" />
             <div className="p-4 text-center flex-1 flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-[#4B2E83]">{bolo.nome}</h3>
-                <p className="text-[#F4C2C2] mb-3">R$ {bolo.preco.toFixed(2)}</p>
+                <p className="text-[#ffa9a9] mb-3">R$ {bolo.preco.toFixed(2)}</p>
               </div>
               <button
                 onClick={() => addToCart(bolo)}
-                className="w-full bg-[#F4C2C2] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg mt-2 font-semibold"
+                className="w-full bg-[#ff7b7b] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg mt-2 font-semibold"
               >
                 Adicionar ao carrinho
               </button>

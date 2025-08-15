@@ -74,7 +74,7 @@ export default function Compras() {
 
       {/* Lista de produtos */}
       {carrinho.length === 0 ? (
-        <div className="bg-[#D89CAB] rounded-2xl shadow-lg p-6 text-center">
+        <div className="bg-[#de6f8a] rounded-2xl shadow-lg p-6 text-center">
           <p className="text-[#4B2E83]">Seu carrinho está vazio.</p>
         </div>
       ) : (
@@ -98,13 +98,13 @@ export default function Compras() {
                 </div>
               </div>
               <button onClick={() => removerItem(index)} className="p-2 rounded-full hover:bg-[#F5E1A4]">
-                <Trash2 size={20} className="text-[#F4C2C2]" />
+                <Trash2 size={20} className="text-[#edcdcd]" />
               </button>
             </div>
           ))}
 
           {/* Total */}
-          <div className="bg-[#D89CAB] p-4 rounded-xl shadow flex justify-between items-center mt-4">
+          <div className="bg-[#ff7c9d] p-4 rounded-xl shadow flex justify-between items-center mt-4">
             <span className="font-semibold text-[#4B2E83]">Total:</span>
             <span className="font-bold text-[#4B2E83] text-lg">R$ {total.toFixed(2)}</span>
           </div>
@@ -112,7 +112,7 @@ export default function Compras() {
           {/* Finalizar compra */}
           <button
             onClick={finalizarCompra}
-            className="w-full bg-[#F4C2C2] hover:bg-[#F5E1A4] text-[#4B2E83] py-3 rounded-xl mt-4 font-semibold"
+            className="w-full bg-[#ffa6a6] hover:bg-[#F5E1A4] text-[#4B2E83] py-3 rounded-xl mt-4 font-semibold"
           >
             Finalizar Compra
           </button>
