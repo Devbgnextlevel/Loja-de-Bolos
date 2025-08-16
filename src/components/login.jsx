@@ -10,8 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
 
 
-  // const location = useLocation();
-  // console.log(location.state);
+
   useEffect(() => {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   if (usuario) {
@@ -37,7 +36,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-pink-100 p-4">
       <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
         <h2 className="text-3xl font-bold text-pink-600 mb-6 text-center">
-          🍰 Loja de Bolos - Login
+          🍰 Loja de Bolos - Ju Doces
         </h2>
 
         {/* Nome */}

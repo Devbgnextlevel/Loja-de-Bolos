@@ -18,12 +18,7 @@ export default function Forms() {
     alert("Preencha todos os campos!");
   }
 };
-  //  const handleSubmit = (e) => {
-  //    e.preventDefault();
-  //    const { Nome, email, telefone } = e.target.elements;
-  //    navigate("/login", { state: { Nome: Nome.value, email: email.value, telefone: telefone.value } });
-  //  };
-
+  
   return (
     <div className="min-h-screen flex items-center justify-center p-3">
       <form className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
