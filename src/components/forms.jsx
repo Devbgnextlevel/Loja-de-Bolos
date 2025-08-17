@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import Bolos1 from "../assets/Bolos1.jpg";
+
 
 export default function Forms() {
   
@@ -20,6 +22,12 @@ export default function Forms() {
 };
   
   return (
+
+    <div
+          className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+          style={{ backgroundImage: `url(${Bolos1})` }}
+        >
+
     <div className="min-h-screen flex items-center justify-center p-3">
       <form className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
@@ -88,6 +96,7 @@ export default function Forms() {
         </button>
 
       </form>
+    </div>
     </div>
   );
 }

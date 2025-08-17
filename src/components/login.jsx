@@ -2,14 +2,15 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 // import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import Bolos1 from "../assets/Bolos1.jpg";
+
+
+
 export default function Login() {
-  
   
   const navigate = useNavigate();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-
-
 
   useEffect(() => {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -32,8 +33,14 @@ export default function Login() {
   }
   };
 
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pink-100 p-4">
+     
+    <div
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+      style={{ backgroundImage: `url(${Bolos1})` }}
+    >
+    {/* <div className="min-h-screen flex items-center justify-center bg-pink-100 p-4"> */}
       <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
         <h2 className="text-3xl font-bold text-pink-600 mb-6 text-center">
           🍰 Loja de Bolos - Ju Doces
@@ -85,5 +92,6 @@ export default function Login() {
         </p>
       </div>
     </div>
+    // </div>
   );
 }
