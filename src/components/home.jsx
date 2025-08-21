@@ -171,6 +171,33 @@ export default function Home() {
         ))}
       </main>
 
+      
+      {/* Seção de Contato */}
+      <footer className="bg-[#ffb2c5] mt-15 p-6 rounded-t-3xl shadow-inner text-[#4B2E83]">
+      <h2 className="text-xl font-bold mb-4 text-center">Contato</h2>
+     <div div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center sm:text-left">
+       <div>
+       <p className="font-semibold">Telefone:</p>
+       <p>(11) 99999-9999</p>
+       </div>
+     <div>
+      <p className="font-semibold">Email:</p>
+      <p>contato@judoces.com</p>
+     </div>
+     <div>
+      <p className="font-semibold">Endereço:</p>
+      <p>Rua das Flores, 123 - Barueri, SP</p>
+     </div>
+     <div>
+      <p className="font-semibold">Trabalhe Conosco:</p>
+      <p>envie seu currículo para rh@judoces.com</p>
+     </div>
+     </div>
+    <p className="text-center text-sm mt-4">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
+   </footer>
+
+
+
       {/* Toast */}
       {showToast && (
         <div className="fixed bottom-6 right-6 bg-[#4B2E83] text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in-out">
