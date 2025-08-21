@@ -5,6 +5,8 @@ import { ArrowLeft, Trash2, Plus, Minus } from "lucide-react";
 export default function Compras() {
   const navigate = useNavigate();
   const [carrinho, setCarrinho] = useState([]);
+  const [cupom, setCupom] = useState(""); // cupom digitado
+  const [desconto, setDesconto] = useState(0); // valor do desconto aplicado
 
   // Carrega carrinho do localStorage
   useEffect(() => {
@@ -53,14 +55,39 @@ export default function Compras() {
     salvarCarrinho(novo);
   };
 
+  // Total sem desconto
+  const total = carrinho.reduce((acc, item) => acc + item.preco * item.qtd, 0);
+
+  // Total com desconto aplicado
+  const totalFinal = Math.max(total - desconto, 0);
+
+  const aplicarCupom = () => {
+    if (cupom === "DESCONTO10") {
+      const valorDesconto = total * 0.1; // 10%
+      setDesconto(valorDesconto);
+      alert("Cupom aplicado com sucesso! 10% de desconto.");
+    } else {
+      setDesconto(0);
+      alert("Cupom inválido.");
+    }
+  };
+
   const finalizarCompra = () => {
+    const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
+    const historico = usuario.historico || [];
+    historico.push({
+      itens: carrinho,
+      total: totalFinal,
+      data: new Date().toLocaleDateString("pt-BR"),
+      cupom: cupom || null,
+    });
+
+    localStorage.setItem("usuario", JSON.stringify({ ...usuario, historico }));
     localStorage.removeItem("carrinho");
     setCarrinho([]);
     alert("Compra finalizada! Obrigado.");
-    navigate("/home");
+    navigate("/Perfil");
   };
-
-  const total = carrinho.reduce((acc, item) => acc + item.preco * item.qtd, 0);
 
   return (
     <div className="min-h-screen bg-[#C8A2C8] p-4 sm:p-6">
@@ -103,10 +130,39 @@ export default function Compras() {
             </div>
           ))}
 
-          {/* Total */}
-          <div className="bg-[#ff7c9d] p-4 rounded-xl shadow flex justify-between items-center mt-4">
-            <span className="font-semibold text-[#4B2E83]">Total:</span>
-            <span className="font-bold text-[#4B2E83] text-lg">R$ {total.toFixed(2)}</span>
+          {/* Cupom */}
+          <div className="bg-[#ffd6e0] p-4 rounded-xl shadow flex flex-col sm:flex-row items-center gap-3 mt-4">
+            <input
+              type="text"
+              value={cupom}
+              onChange={(e) => setCupom(e.target.value)}
+              placeholder="Digite seu cupom"
+              className="flex-1 p-2 rounded-lg border border-[#4B2E83] outline-none"
+            />
+            <button
+              onClick={aplicarCupom}
+              className="bg-[#ffa6a6] hover:bg-[#F5E1A4] text-[#4B2E83] px-4 py-2 rounded-xl font-semibold"
+            >
+              Aplicar
+            </button>
+          </div>
+
+          {/* Totais */}
+          <div className="bg-[#ff7c9d] p-4 rounded-xl shadow flex flex-col gap-2 mt-4">
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-[#4B2E83]">Subtotal:</span>
+              <span className="font-bold text-[#4B2E83] text-lg">R$ {total.toFixed(2)}</span>
+            </div>
+            {desconto > 0 && (
+              <div className="flex justify-between items-center text-green-700">
+                <span>Desconto:</span>
+                <span>- R$ {desconto.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-[#4B2E83]">Total:</span>
+              <span className="font-bold text-[#4B2E83] text-lg">R$ {totalFinal.toFixed(2)}</span>
+            </div>
           </div>
 
           {/* Finalizar compra */}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, LogOut, Menu } from "lucide-react";
+import { ShoppingCart, Search, LogOut, Menu, User } from "lucide-react";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,13 +14,21 @@ export default function Home() {
 
   const [bolos] = useState([
     { id: 1, nome: "Bolo de Chocolate", preco: 59.9, img: "https://via.placeholder.com/300x200?text=Chocolate" },
-    { id: 2, nome: "Bolo de Morango", preco: 64.9, imxg: "https://via.placeholder.com/300x200?text=Morango" },
+    { id: 2, nome: "Bolo de Morango", preco: 64.9, img: "https://via.placeholder.com/300x200?text=Morango" },
     { id: 3, nome: "Bolo de Limão", preco: 54.9, img: "https://via.placeholder.com/300x200?text=Limao" },
     { id: 4, nome: "Bolo de Cenoura", preco: 49.9, img: "https://via.placeholder.com/300x200?text=Cenoura" },
     { id: 5, nome: "Bolo Red Velvet", preco: 69.9, img: "https://via.placeholder.com/300x200?text=Red+Velvet" },
     { id: 6, nome: "Bolo de Abacaxi", preco: 62.9, img: "https://via.placeholder.com/300x200?text=Abacaxi" },
     { id: 7, nome: "Bolo de Nozes", preco: 74.9, img: "https://via.placeholder.com/300x200?text=Nozes" },
     { id: 8, nome: "Bolo de Coco", preco: 57.9, img: "https://via.placeholder.com/300x200?text=Coco" },
+    { id: 9, nome: "Bolo de Chocolate", preco: 59.9, img: "https://via.placeholder.com/300x200?text=Chocolate" },
+    { id: 10, nome: "Bolo de Moranguete", preco: 64.9, img: "https://via.placeholder.com/300x200?text=Morango" },
+    { id: 11, nome: "Bolo de Limão", preco: 54.9, img: "https://via.placeholder.com/300x200?text=Limao" },
+    { id: 12, nome: "Bolo de maracujá", preco: 49.9, img: "https://via.placeholder.com/300x200?text=Maracuja" },
+    { id: 13, nome: "Bolo de banana", preco: 69.9, img: "https://via.placeholder.com/300x200?text=Banana" },
+    { id: 14, nome: "Bolo de limão", preco: 62.9, img: "https://via.placeholder.com/300x200?text=Limão" },
+    { id: 15, nome: "Bolo de morango", preco: 74.9, img: "https://via.placeholder.com/300x200?text=Morango" },
+    { id: 16, nome: "Bolo de uva", preco: 57.9, img: "https://via.placeholder.com/300x200?text=Uva" },
   ]);
 
   useEffect(() => {
@@ -38,11 +46,15 @@ export default function Home() {
 
   const handleLogout = () => {
     localStorage.removeItem("usuario");
-    navigate("/");
+    navigate("/usuario");
   };
 
   const handleCartClick = () => {
     navigate("/compras");
+  };
+
+  const handlePerfilClick = () => {
+    navigate("/usuario");
   };
 
   const addToCart = (bolo) => {
@@ -88,6 +100,7 @@ export default function Home() {
 
         {/* Botões ícones */}
         <div className="flex space-x-3 relative">
+          {/* Carrinho */}
           <button onClick={handleCartClick} className="p-2 rounded-full hover:bg-[#F5E1A4] relative">
             <ShoppingCart size={24} className="text-[#4B2E83]" />
             {carrinhoCount > 0 && (
@@ -96,6 +109,13 @@ export default function Home() {
               </span>
             )}
           </button>
+
+          {/* Perfil */}
+          <button onClick={handlePerfilClick} className="p-2 rounded-full hover:bg-[#F5E1A4]">
+            <User size={24} className="text-[#4B2E83]" />
+          </button>
+
+          {/* Logout */}
           <button onClick={handleLogout} className="p-2 rounded-full hover:bg-[#F5E1A4]">
             <LogOut size={24} className="text-[#ee9393]" />
           </button>
@@ -110,6 +130,9 @@ export default function Home() {
           <div className="flex space-x-2">
             <button onClick={handleCartClick} className="flex-1 bg-[#ffb5b5] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
               Carrinho
+            </button>
+            <button onClick={handlePerfilClick} className="flex-1 bg-[#ffb5b5] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
+              Perfil
             </button>
             <button onClick={handleLogout} className="flex-1 bg-[#ffb4b4] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
               Sair
