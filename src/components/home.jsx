@@ -11,6 +11,7 @@ export default function Home() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   const [bolos] = useState([
     { id: 1, nome: "Bolo de Chocolate", preco: 59.9, img: "https://via.placeholder.com/300x200?text=Chocolate" },
@@ -86,7 +87,7 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Campo de busca */}
+        {/* Campo de busca desktop */}
         <div className="hidden sm:flex items-center bg-[#fff6dc] rounded-lg px-3 py-1 w-1/3">
           <Search className="text-[#4B2E83] mr-2" size={18} />
           <input
@@ -99,7 +100,15 @@ export default function Home() {
         </div>
 
         {/* Botões ícones */}
-        <div className="flex space-x-3 relative">
+        <div className="flex space-x-3 relative items-center">
+          {/* Lupa mobile */}
+          <button
+            onClick={() => setShowMobileSearch((prev) => !prev)}
+            className="sm:hidden p-2 rounded-full hover:bg-[#F5E1A4]"
+          >
+            <Search size={24} className="text-[#4B2E83]" />
+          </button>
+
           {/* Carrinho */}
           <button onClick={handleCartClick} className="p-2 rounded-full hover:bg-[#F5E1A4] relative">
             <ShoppingCart size={24} className="text-[#4B2E83]" />
@@ -121,6 +130,21 @@ export default function Home() {
           </button>
         </div>
       </header>
+
+      {/* Campo de busca mobile */}
+      {showMobileSearch && (
+        <div className="sm:hidden px-4 py-2 bg-[#fff6dc] flex items-center animate-slide-down shadow">
+          <Search className="text-[#4B2E83] mr-2" size={18} />
+          <input
+            type="text"
+            placeholder="Pesquisar bolo..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="bg-transparent outline-none w-full text-[#4B2E83]"
+            autoFocus
+          />
+        </div>
+      )}
 
       {/* Menu mobile */}
       {menuOpen && (
@@ -171,32 +195,29 @@ export default function Home() {
         ))}
       </main>
 
-      
       {/* Seção de Contato */}
       <footer className="bg-[#ffb2c5] mt-15 p-6 rounded-t-3xl shadow-inner text-[#4B2E83]">
-      <h2 className="text-xl font-bold mb-4 text-center">Contato</h2>
-     <div div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center sm:text-left">
-       <div>
-       <p className="font-semibold">Telefone:</p>
-       <p>(11) 99999-9999</p>
-       </div>
-     <div>
-      <p className="font-semibold">Email:</p>
-      <p>contato@judoces.com</p>
-     </div>
-     <div>
-      <p className="font-semibold">Endereço:</p>
-      <p>Rua das Flores, 123 - Barueri, SP</p>
-     </div>
-     <div>
-      <p className="font-semibold">Trabalhe Conosco:</p>
-      <p>envie seu currículo para rh@judoces.com</p>
-     </div>
-     </div>
-    <p className="text-center text-sm mt-4">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
-   </footer>
-
-
+        <h2 className="text-xl font-bold mb-4 text-center">Contato</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center sm:text-left">
+          <div>
+            <p className="font-semibold">Telefone:</p>
+            <p>(11) 99999-9999</p>
+          </div>
+          <div>
+            <p className="font-semibold">Email:</p>
+            <p>contato@judoces.com</p>
+          </div>
+          <div>
+            <p className="font-semibold">Endereço:</p>
+            <p>Rua das Flores, 123 - Barueri, SP</p>
+          </div>
+          <div>
+            <p className="font-semibold">Trabalhe Conosco:</p>
+            <p>envie seu currículo para rh@judoces.com</p>
+          </div>
+        </div>
+        <p className="text-center text-sm mt-4">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
+      </footer>
 
       {/* Toast */}
       {showToast && (
@@ -205,6 +226,7 @@ export default function Home() {
         </div>
       )}
 
+      {/* Estilos adicionais */}
       <style>{`
         .animate-fade-in-out {
           animation: fadeInOut 3s forwards;
@@ -214,6 +236,14 @@ export default function Home() {
           10% { opacity: 1; transform: translateY(0); }
           90% { opacity: 1; transform: translateY(0); }
           100% { opacity: 0; transform: translateY(20px); }
+        }
+
+        @keyframes slideDown {
+          0% { opacity: 0; transform: translateY(-10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-down {
+          animation: slideDown 0.3s ease-out;
         }
       `}</style>
     </div>

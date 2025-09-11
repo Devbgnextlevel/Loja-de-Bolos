@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 export default function Perfil() {
+
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState({ historico: [] });
 
@@ -15,8 +16,10 @@ export default function Perfil() {
     const novoHistorico = usuario.historico.filter(
       (_compra, idx) => idx !== indexToRemove
     );
+
     const novoUsuario = { ...usuario, historico: novoHistorico };
     setUsuario(novoUsuario);
+    
     localStorage.setItem("usuario", JSON.stringify(novoUsuario));
   };
 

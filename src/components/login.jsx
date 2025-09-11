@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import Bolos1 from "../assets/Bolos1.jpg";
 
 
-
 export default function Login() {
   
   const navigate = useNavigate();
@@ -23,7 +22,7 @@ export default function Login() {
   }
  }, []);
 
-   // Função do botão Entrar
+ // Função do botão Entrar
   const handleLogin = () => {
   if (nome && email) {
     // alert(`Bem-vindo, ${nome}!`);
@@ -34,8 +33,9 @@ export default function Login() {
   };
 
   
-  return (
-     
+
+  return (     
+    
     <div
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
       style={{ backgroundImage: `url(${Bolos1})` }}

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Bolos1 from "../assets/Bolos1.jpg";
 
 export default function Forms() {
+  
   const navigate = useNavigate();
 
   const [nome, setNome] = useState("");
