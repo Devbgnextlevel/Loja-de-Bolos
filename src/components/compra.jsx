@@ -1,22 +1,37 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Trash2, Plus, Minus } from "lucide-react";
+import {
+  boleto, // valida qualquer boleto (bancário ou de arrecadação), com ou sem máscara
+  boletoBancario,
+  boletoArrecadacao,
+  boletoBancarioLinhaDigitavel,
+  boletoArrecadacaoLinhaDigitavel
+} from "boleto-brasileiro-validator";
 
 export default function Compras() {
   const navigate = useNavigate();
   const [carrinho, setCarrinho] = useState([]);
-  const [cupom, setCupom] = useState(""); 
-  const [desconto, setDesconto] = useState(0); 
+  const [cupom, setCupom] = useState("");
+  const [desconto, setDesconto] = useState(0);
 
   // novos estados
   const [cep, setCep] = useState("");
   const [frete, setFrete] = useState(0);
   const [pagamento, setPagamento] = useState(null);
 
-  // Carrega carrinho do localStorage
+  // estados do cartão de crédito
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardName, setCardName] = useState("");
+  const [cardExpiry, setCardExpiry] = useState("");  // formato “MM/AA” ou “MM/AAAA”
+  const [cardCVV, setCardCVV] = useState("");
+
+  // novos estados para boleto
+  const [boletoLinha, setBoletoLinha] = useState("");
+  const [erroBoleto, setErroBoleto] = useState("");
+
   useEffect(() => {
     const itens = JSON.parse(localStorage.getItem("carrinho") || "[]");
-
     const itensComQtd = itens.reduce((acc, item) => {
       const existe = acc.find(i => i.id === item.id);
       if (existe) {
@@ -61,15 +76,12 @@ export default function Compras() {
     salvarCarrinho(novo);
   };
 
-  // Total sem desconto
   const total = carrinho.reduce((acc, item) => acc + item.preco * item.qtd, 0);
-
-  // Total com desconto e frete
   const totalFinal = Math.max(total - desconto + frete, 0);
 
   const aplicarCupom = () => {
     if (cupom === "DESCONTO10") {
-      const valorDesconto = total * 0.1; 
+      const valorDesconto = total * 0.1;
       setDesconto(valorDesconto);
       alert("Cupom aplicado com sucesso! 10% de desconto.");
     } else {
@@ -78,15 +90,84 @@ export default function Compras() {
     }
   };
 
-  // Simulação de cálculo de frete
+  // Funções de validação simples
+
+  const onlyDigits = (str) => {
+    return str.replace(/\D/g, "");
+  };
+
+  const validarCEP = (cep) => {
+    const clean = onlyDigits(cep);
+    return clean.length === 8;
+  };
+
+  const validarNumeroCartao = (num) => {
+    const clean = onlyDigits(num);
+    return clean.length >= 13 && clean.length <= 19;
+  };
+
+  const validarValidade = (val) => {
+    if (!val) return false;
+    const parts = val.split("/");
+    if (parts.length !== 2) return false;
+    const mm = parseInt(parts[0], 10);
+    let yy = parseInt(parts[1], 10);
+    if (isNaN(mm) || mm < 1 || mm > 12) return false;
+
+    const now = new Date();
+    const currentYearFull = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+
+    // se o ano vier como 2 dígitos, considerar 2000 + yy
+    if (parts[1].length === 2) {
+      yy += 2000;
+    }
+    if (isNaN(yy)) return false;
+
+    if (yy < currentYearFull) return false;
+    if (yy === currentYearFull && mm < currentMonth) return false;
+
+    return true;
+  };
+
+  const validarCVV = (cvv) => {
+    const clean = onlyDigits(cvv);
+    return clean.length === 3 || clean.length === 4;
+  };
+
+  const validarCartao = () => {
+    const erros = [];
+
+    if (!validarNumeroCartao(cardNumber)) {
+      erros.push("Número do cartão inválido (13‑19 dígitos)");
+    }
+    if (!cardName || cardName.trim().length === 0) {
+      erros.push("Nome impresso faltando");
+    }
+    if (!validarValidade(cardExpiry)) {
+      erros.push("Validade do cartão inválida ou expirado");
+    }
+    if (!validarCVV(cardCVV)) {
+      erros.push("CVV inválido (3 ou 4 dígitos)");
+    }
+
+    return erros;
+  };
+
   const calcularFrete = () => {
-    if (cep.length < 8) {
-      alert("Digite um CEP válido.");
+    if (!validarCEP(cep)) {
+      alert("Digite um CEP válido (8 dígitos numéricos).");
       return;
     }
-    const valor = Math.floor(Math.random() * 20) + 10; // frete entre 10 e 30
+    const valor = Math.floor(Math.random() * 20) + 10; // frete fictício entre 10 e 30
     setFrete(valor);
     alert(`Frete calculado: R$ ${valor.toFixed(2)}`);
+  };
+
+  const validarBoletoLinha = (linha) => {
+    const clean = linha.replace(/\s/g, "");
+    // usa a lib para validar boleto completo
+    return boleto(clean);
   };
 
   const finalizarCompra = () => {
@@ -95,6 +176,33 @@ export default function Compras() {
       return;
     }
 
+    if (!validarCEP(cep)) {
+      alert("Digite um CEP válido antes de finalizar.");
+      return;
+    }
+
+    if (pagamento === "credito") {
+      const errosCartao = validarCartao();
+      if (errosCartao.length > 0) {
+        alert("Erro no pagamento: " + errosCartao.join(", "));
+        return;
+      }
+    }
+
+    if (pagamento === "boleto") {
+      if (!boletoLinha || boletoLinha.trim().length === 0) {
+        setErroBoleto("Linha digitável do boleto é obrigatória.");
+        alert("Linha digitável do boleto é obrigatória.");
+        return;
+      }
+      if (!validarBoletoLinha(boletoLinha)) {
+        setErroBoleto("Linha digitável do boleto inválida.");
+        alert("Erro no boleto: linha digitável inválida.");
+        return;
+      }
+    }
+
+    // Prossegue com “compra fictícia”
     const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
     const historico = usuario.historico || [];
     historico.push({
@@ -105,11 +213,27 @@ export default function Compras() {
       frete,
       cep,
       pagamento,
+      boletoLinha: pagamento === "boleto" ? boletoLinha : null,
+      // não guardar dados do cartão
     });
 
     localStorage.setItem("usuario", JSON.stringify({ ...usuario, historico }));
     localStorage.removeItem("carrinho");
     setCarrinho([]);
+
+    // limpar campos
+    setCardNumber("");
+    setCardName("");
+    setCardExpiry("");
+    setCardCVV("");
+    setPagamento(null);
+    setCep("");
+    setFrete(0);
+    setDesconto(0);
+    setCupom("");
+    setBoletoLinha("");
+    setErroBoleto("");
+
     alert("Compra finalizada! Obrigado.");
     navigate("/Perfil");
   };
@@ -124,7 +248,6 @@ export default function Compras() {
         <h1 className="ml-3 text-2xl font-bold text-[#4B2E83]">Carrinho de Compras</h1>
       </header>
 
-      {/* Lista de produtos */}
       {carrinho.length === 0 ? (
         <div className="bg-[#de6f8a] rounded-2xl shadow-lg p-6 text-center">
           <p className="text-[#4B2E83]">Seu carrinho está vazio.</p>
@@ -173,7 +296,7 @@ export default function Compras() {
           </div>
 
           {/* Endereço / Frete */}
-          <div className="bg-[#ffd6e0] p-4 rounded-xl shadow flex flex-col gap-3 mt-4">
+          <div className="bg-[#ffd6e0] p-4 rounded-xl shadow flex flex-col gap-3 mt=4">
             <label className="font-semibold text-[#4B2E83]">CEP para entrega:</label>
             <div className="flex gap-2">
               <input
@@ -198,26 +321,80 @@ export default function Compras() {
           {/* Forma de Pagamento */}
           <div className="bg-[#ffd6e0] p-4 rounded-xl shadow flex flex-col gap-3 mt-4">
             <label className="font-semibold text-[#4B2E83]">Forma de pagamento:</label>
-            
             <div className="flex gap-3">
-              <button onClick={() => setPagamento("pix")} className={`px-4 py-2 rounded-xl ${pagamento==="pix" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}>Pix</button>
-              <button onClick={() => setPagamento("credito")} className={`px-4 py-2 rounded-xl ${pagamento==="credito" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}>Crédito</button>
-              <button onClick={() => setPagamento("debito")} className={`px-4 py-2 rounded-xl ${pagamento==="debito" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}>Débito</button>
+              <button
+                onClick={() => setPagamento("pix")}
+                className={`px-4 py-2 rounded-xl ${pagamento === "pix" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}
+              >
+                Pix
+              </button>
+              <button
+                onClick={() => setPagamento("credito")}
+                className={`px-4 py-2 rounded-xl ${pagamento === "credito" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}
+              >
+                Crédito
+              </button>
+              <button
+                onClick={() => setPagamento("boleto")}
+                className={`px-4 py-2 rounded-xl ${pagamento === "boleto" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}
+              >
+                Boleto
+              </button>
             </div>
 
             {pagamento === "credito" && (
               <div className="flex flex-col gap-2">
-                <input type="text" placeholder="Número do cartão" className="p-2 border rounded-lg" />
-                <input type="text" placeholder="Nome impresso" className="p-2 border rounded-lg" />
+                <input
+                  type="text"
+                  placeholder="Número do cartão"
+                  className="p-2 border rounded-lg"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="Nome impresso"
+                  className="p-2 border rounded-lg"
+                  value={cardName}
+                  onChange={(e) => setCardName(e.target.value)}
+                />
                 <div className="flex gap-2">
-                  <input type="text" placeholder="Validade (MM/AA)" className="p-2 border rounded-lg flex-1" />
-                  <input type="text" placeholder="CVV" className="p-2 border rounded-lg w-20" />
+                  <input
+                    type="text"
+                    placeholder="Validade (MM/AA)"
+                    className="p-2 border rounded-lg flex-1"
+                    value={cardExpiry}
+                    onChange={(e) => setCardExpiry(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="CVV"
+                    className="p-2 border rounded-lg w-20"
+                    value={cardCVV}
+                    onChange={(e) => setCardCVV(e.target.value)}
+                  />
                 </div>
                 <select className="p-2 border rounded-lg">
                   <option>1x sem juros</option>
                   <option>2x sem juros</option>
                   <option>3x sem juros</option>
                 </select>
+              </div>
+            )}
+
+            {pagamento === "boleto" && (
+              <div className="flex flex-col gap-2">
+                <input
+                  type="text"
+                  placeholder="Linha digitável do boleto"
+                  className={`p-2 border rounded-lg ${erroBoleto ? "border-red-500" : ""}`}
+                  value={boletoLinha}
+                  onChange={(e) => {
+                    setBoletoLinha(e.target.value);
+                    if (erroBoleto) setErroBoleto("");
+                  }}
+                />
+                {erroBoleto && <p className="text-red-600">{erroBoleto}</p>}
               </div>
             )}
           </div>
@@ -246,7 +423,6 @@ export default function Compras() {
             </div>
           </div>
 
-          {/* Finalizar compra */}
           <button
             onClick={finalizarCompra}
             className="w-full bg-[#ffa6a6] hover:bg-[#F5E1A4] text-[#4B2E83] py-3 rounded-xl mt-4 font-semibold"

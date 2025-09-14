@@ -149,16 +149,16 @@ export default function Home() {
       {/* Menu mobile */}
       {menuOpen && (
         <div className="sm:hidden bg-[#ffa0b7] shadow p-4 space-y-2">
-          <p className="text-[#4B2E83] font-semibold">{nome}</p>
-          <p className="text-[#4B2E83]">{email}</p>
-          <div className="flex space-x-2">
-            <button onClick={handleCartClick} className="flex-1 bg-[#ffb5b5] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
+          <p className="text-[#130716] font-semibold">{nome}</p>
+          <p className="text-[#130716] font-semibold">{email}</p>
+          <div className="flex space-x-2 gap-4" >
+            <button onClick={handleCartClick} className="flex-1 bg-[#f88d87] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
               Carrinho
             </button>
-            <button onClick={handlePerfilClick} className="flex-1 bg-[#ffb5b5] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
+            <button onClick={handlePerfilClick} className="flex-1 bg-[#f88d87] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
               Perfil
             </button>
-            <button onClick={handleLogout} className="flex-1 bg-[#ffb4b4] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
+            <button onClick={handleLogout} className="flex-1 bg-[#f88d87] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
               Sair
             </button>
           </div>
@@ -172,7 +172,7 @@ export default function Home() {
       </div>
 
       {/* Vitrine de bolos */}
-      <main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-12">
         {filteredBolos.map((bolo) => (
           <div
             key={bolo.id}
@@ -196,9 +196,9 @@ export default function Home() {
       </main>
 
       {/* Seção de Contato */}
-      <footer className="bg-[#ffb2c5] mt-15 p-6 rounded-t-3xl shadow-inner text-[#4B2E83]">
-        <h2 className="text-xl font-bold mb-4 text-center">Contato</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center sm:text-left">
+      <footer className="bg-[#ffb2c5] mt-15 p-7 rounded-t-3xl shadow-inner text-[#4B2E83]">
+        <h2 className="text-xl font-bold mb-9 text-left">Contato</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-1 gap-7 text-left sm:text-left">
           <div>
             <p className="font-semibold">Telefone:</p>
             <p>(11) 99999-9999</p>
@@ -216,8 +216,10 @@ export default function Home() {
             <p>envie seu currículo para rh@judoces.com</p>
           </div>
         </div>
-        <p className="text-center text-sm mt-4">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
+        <p className="text-center text-sm mt-5">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
       </footer>
+
+
 
       {/* Toast */}
       {showToast && (
