@@ -9,6 +9,7 @@ import {
   boletoArrecadacaoLinhaDigitavel
 } from "boleto-brasileiro-validator";
 
+
 export default function Compras() {
   const navigate = useNavigate();
   const [carrinho, setCarrinho] = useState([]);
@@ -43,6 +44,7 @@ export default function Compras() {
     }, []);
     setCarrinho(itensComQtd);
   }, []);
+
 
   const salvarCarrinho = (novoCarrinho) => {
     const arrParaStorage = [];
@@ -91,20 +93,22 @@ export default function Compras() {
   };
 
   // Funções de validação simples
-
   const onlyDigits = (str) => {
     return str.replace(/\D/g, "");
   };
+  
 
   const validarCEP = (cep) => {
     const clean = onlyDigits(cep);
     return clean.length === 8;
   };
 
-  const validarNumeroCartao = (num) => {
+
+    const validarNumeroCartao = (num) => {
     const clean = onlyDigits(num);
     return clean.length >= 13 && clean.length <= 19;
   };
+
 
   const validarValidade = (val) => {
     if (!val) return false;
@@ -127,8 +131,9 @@ export default function Compras() {
     if (yy < currentYearFull) return false;
     if (yy === currentYearFull && mm < currentMonth) return false;
 
+
     return true;
-  };
+   };
 
   const validarCVV = (cvv) => {
     const clean = onlyDigits(cvv);
@@ -159,10 +164,11 @@ export default function Compras() {
       alert("Digite um CEP válido (8 dígitos numéricos).");
       return;
     }
+
     const valor = Math.floor(Math.random() * 20) + 10; // frete fictício entre 10 e 30
     setFrete(valor);
     alert(`Frete calculado: R$ ${valor.toFixed(2)}`);
-  };
+   };
 
   const validarBoletoLinha = (linha) => {
     const clean = linha.replace(/\s/g, "");
@@ -255,7 +261,7 @@ export default function Compras() {
       ) : (
         <div className="space-y-4">
           {carrinho.map((item, index) => (
-            <div key={index} className="bg-[#D89CAB] p-4 rounded-xl shadow flex flex-col sm:flex-row items-center sm:justify-between gap-4">
+            <div key={index} className="bg-[] p-4 rounded-xl shadow flex flex-col sm:flex-row items-center sm:justify-between gap-4">
               <div className="flex items-center space-x-4 flex-1">
                 <img src={item.img} alt={item.nome} className="w-24 h-24 object-cover rounded-lg" />
                 <div className="flex-1">
@@ -279,7 +285,7 @@ export default function Compras() {
           ))}
 
           {/* Cupom */}
-          <div className="bg-[#ffd6e0] p-4 rounded-xl shadow flex flex-col sm:flex-row items-center gap-3 mt-4">
+          <div className="bg-[] p-4 rounded-xl shadow flex  sm:flex-row items-center gap-3 mt-4">
             <input
               type="text"
               value={cupom}
@@ -296,8 +302,8 @@ export default function Compras() {
           </div>
 
           {/* Endereço / Frete */}
-          <div className="bg-[#ffd6e0] p-4 rounded-xl shadow flex flex-col gap-3 mt=4">
-            <label className="font-semibold text-[#4B2E83]">CEP para entrega:</label>
+          <div className="bg-[] p-4 rounded-xl shadow flex flex-col gap-3 mt=4">
+            <label className="font-semibold text-[#4B2E83]">Taxa para entrega:</label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -308,7 +314,7 @@ export default function Compras() {
               />
               <button
                 onClick={calcularFrete}
-                className="bg-[#ffa6a6] hover:bg-[#F5E1A4] px-4 py-2 rounded-xl font-semibold text-[#4B2E83]"
+                className="bg-[#ffa6a6] px-4 py-2 rounded-xl font-semibold text-[#4B2E83]"
               >
                 Calcular
               </button>
@@ -319,7 +325,7 @@ export default function Compras() {
           </div>
 
           {/* Forma de Pagamento */}
-          <div className="bg-[#ffd6e0] p-4 rounded-xl shadow flex flex-col gap-3 mt-4">
+          <div className="bg-[] p-4 rounded-xl shadow flex flex-col gap-3 mt-4">
             <label className="font-semibold text-[#4B2E83]">Forma de pagamento:</label>
             <div className="flex gap-3">
               <button
@@ -378,6 +384,8 @@ export default function Compras() {
                   <option>1x sem juros</option>
                   <option>2x sem juros</option>
                   <option>3x sem juros</option>
+                   <option>4x sem juros</option>
+                   <option>5x sem juros</option>
                 </select>
               </div>
             )}
@@ -400,7 +408,7 @@ export default function Compras() {
           </div>
 
           {/* Totais */}
-          <div className="bg-[#ff7c9d] p-4 rounded-xl shadow flex flex-col gap-2 mt-4">
+          <div className="p-4 rounded-xl shadow flex flex-col gap-2 mt-4">
             <div className="flex justify-between items-center">
               <span className="font-semibold text-[#4B2E83]">Subtotal:</span>
               <span className="font-bold text-[#4B2E83] text-lg">R$ {total.toFixed(2)}</span>
@@ -422,6 +430,7 @@ export default function Compras() {
               <span className="font-bold text-[#4B2E83] text-lg">R$ {totalFinal.toFixed(2)}</span>
             </div>
           </div>
+
 
           <button
             onClick={finalizarCompra}

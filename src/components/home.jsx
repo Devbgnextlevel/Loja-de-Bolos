@@ -196,8 +196,8 @@ export default function Home() {
       </main>
 
       {/* Seção de Contato */}
-      <footer className="bg-[#ffb2c5] mt-15 p-7 rounded-t-3xl shadow-inner text-[#4B2E83]">
-        <h2 className="text-xl font-bold mb-9 text-left">Contato</h2>
+      <footer className="bg-[#ffb2c5] mt-15 p-6 rounded-t-3xl shadow-inner text-[#4B2E83]">
+        <h2 className="text-xl font-bold mb-8 text-left">Contato</h2>
         <div className="grid grid-cols-2 sm:grid-cols-1 gap-7 text-left sm:text-left">
           <div>
             <p className="font-semibold">Telefone:</p>
@@ -209,7 +209,7 @@ export default function Home() {
           </div>
           <div>
             <p className="font-semibold">Endereço:</p>
-            <p>Rua das Flores, 123 - Barueri, SP</p>
+            <p>Rua das Flores, 123 - Barueri,SP</p>
           </div>
           <div>
             <p className="font-semibold">Trabalhe Conosco:</p>

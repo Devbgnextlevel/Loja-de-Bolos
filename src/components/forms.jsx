@@ -11,6 +11,7 @@ export default function Forms() {
   const [telefone, setTelefone] = useState("");
 
   const handleEnviar = () => {
+
     if (nome && email && telefone) {
       localStorage.setItem("usuario", JSON.stringify({ nome, email, telefone }));
       console.log("Formulário enviado com sucesso!", { nome, email, telefone });
@@ -18,6 +19,7 @@ export default function Forms() {
     } else {
       alert("Preencha todos os campos!");
     }
+    
   };
 
   // Limita e formata telefone
@@ -40,6 +42,7 @@ export default function Forms() {
     if (value.length > 25) value = value.slice(0, 25);
     setEmail(value);
   };
+
 
   return (
     <div
