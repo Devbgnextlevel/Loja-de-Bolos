@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Bolos1 from "../assets/Bolos1.jpg";
 
 export default function Forms() {
-  
   const navigate = useNavigate();
 
   const [nome, setNome] = useState("");
@@ -11,18 +10,15 @@ export default function Forms() {
   const [telefone, setTelefone] = useState("");
 
   const handleEnviar = () => {
-
     if (nome && email && telefone) {
       localStorage.setItem("usuario", JSON.stringify({ nome, email, telefone }));
       console.log("Formulário enviado com sucesso!", { nome, email, telefone });
-      navigate("/"); // Vai para a rota do Login
+      navigate("/"); 
     } else {
       alert("Preencha todos os campos!");
     }
-    
   };
 
-  // Limita e formata telefone
   const handleTelefoneChange = (e) => {
     let value = e.target.value.replace(/\D/g, "");
     if (value.length > 11) value = value.slice(0, 11);
@@ -36,13 +32,12 @@ export default function Forms() {
     setTelefone(value);
   };
 
-  // Limita email a 25 caracteres
+  
   const handleEmailChange = (e) => {
     let value = e.target.value;
     if (value.length > 25) value = value.slice(0, 25);
     setEmail(value);
   };
-
 
   return (
     <div
@@ -50,12 +45,12 @@ export default function Forms() {
       style={{ backgroundImage: `url(${Bolos1})` }}
     >
       <div className="flex items-center justify-center w-full">
-        <form className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md sm:max-w-lg md:max-w-xl">
+        <form className="bg-white rounded-4xl shadow-lg p-10 w-full max-w-md sm:max-w-lg md:max-w-xl">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             Cadastro
           </h2>
 
-          {/* Nome */}
+         
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-1">Nome</label>
             <input
@@ -67,7 +62,7 @@ export default function Forms() {
             />
           </div>
 
-          {/* Email */}
+          
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-1">Email</label>
             <input
@@ -79,7 +74,7 @@ export default function Forms() {
             />
           </div>
 
-          {/* Telefone */}
+       
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-1">Telefone</label>
             <input
@@ -91,7 +86,7 @@ export default function Forms() {
             />
           </div>
 
-          {/* Checkbox */}
+          
           <div className="flex items-center mb-6">
             <input
               type="checkbox"
@@ -103,14 +98,24 @@ export default function Forms() {
             </label>
           </div>
 
-          {/* Botão */}
-          <button
-            onClick={handleEnviar}
-            type="button"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
-          >
-            Enviar
-          </button>
+         
+          <div className="flex gap-4">
+            <button
+              onClick={() => navigate(-1)} 
+              type="button"
+              className="w-1/2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-xl transition duration-200"
+            >
+              Voltar
+            </button>
+
+            <button
+              onClick={handleEnviar}
+              type="button"
+              className="w-1/2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
+            >
+              Enviar
+            </button>
+          </div>
         </form>
       </div>
     </div>

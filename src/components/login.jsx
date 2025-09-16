@@ -40,13 +40,15 @@ export default function Login() {
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
       style={{ backgroundImage: `url(${Bolos1})` }}
     >
-    {/* <div className="min-h-screen flex items-center justify-center bg-pink-100 p-4"> */}
+    
       <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
         <h2 className="text-3xl font-bold text-pink-600 mb-6 text-center">
-          🍰 Loja de Bolos - Ju Doces
+          🍰  Loja de Bolos 
+           <br />
+              Ju Doces
         </h2>
 
-        {/* Nome */}
+       
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1">Nome</label>
           <input
@@ -58,7 +60,7 @@ export default function Login() {
           />
         </div>
 
-        {/* email */}
+        
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-1">
             Email
@@ -72,7 +74,7 @@ export default function Login() {
           />
         </div>
 
-        {/* Botão de Login */}
+        
         <button
           onClick={handleLogin}
           className="w-full bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
@@ -80,14 +82,14 @@ export default function Login() {
           Entrar
         </button>
 
-        {/* Link para Cadastro */}
+        
         <p className="mt-4 text-center text-gray-600">
           Não tem cadastro?{" "}
           <Link
             to="/cadastro"
             className="text-pink-500 hover:underline font-medium"
           >
-            Criar conta
+            Registre-se
           </Link>
         </p>
       </div>

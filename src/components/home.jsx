@@ -8,8 +8,6 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [search, setSearch] = useState("");
   const [carrinhoCount, setCarrinhoCount] = useState(0);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
@@ -63,10 +61,6 @@ export default function Home() {
     carrinho.push(bolo);
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
     setCarrinhoCount(carrinho.length);
-
-    setToastMessage(`${bolo.nome} adicionado ao carrinho!`);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
   };
 
   const filteredBolos = bolos.filter((bolo) =>
@@ -221,12 +215,13 @@ export default function Home() {
 
 
 
-      {/* Toast */}
+      {/* Toast
       {showToast && (
         <div className="fixed bottom-6 right-6 bg-[#4B2E83] text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in-out">
           {toastMessage}
         </div>
-      )}
+      )} */}
+
 
       {/* Estilos adicionais */}
       <style>{`
