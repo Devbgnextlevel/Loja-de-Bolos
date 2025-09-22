@@ -34,7 +34,7 @@ export default function Usuario() {
   );
 
   return (
-    <div className="min-h-screen bg-[#C8A2C8] p-4 sm:p-6">
+    <div className="min-h-screen bg-[#f8f8f8] p-4 sm:p-6">
       {/* Cabeçalho */}
       <header className="flex items-center mb-6">
         <button
@@ -47,7 +47,7 @@ export default function Usuario() {
       </header>
 
       {/* Informações do usuário */}
-      <div className="bg-[#D89CAB] rounded-xl shadow p-6 mb-6">
+      <div className="bg-[#ffaac0] rounded-xl shadow p-6 mb-6">
         <h2 className="text-xl font-semibold text-[#4B2E83] mb-2">
           Informações Pessoais
         </h2>
@@ -61,7 +61,7 @@ export default function Usuario() {
       </div>
 
       {/* Histórico de compras */}
-      <div className="bg-[#de6f8a] rounded-xl shadow p-6">
+      <div className="bg-[#ffaac0] rounded-xl shadow p-6">
         <h2 className="text-xl font-semibold text-[#4B2E83] mb-4">
           Histórico de Compras
         </h2>
@@ -69,7 +69,7 @@ export default function Usuario() {
         {usuario.historico.length > 0 ? (
           <div className="space-y-4">
             {usuario.historico.map((compra, idx) => (
-              <div key={idx} className="bg-[#F4C2C2] p-4 rounded-lg">
+              <div key={idx} className="bg-[#f8f8f8] p-4 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-[#4B2E83]">📅 {compra.data}</span>
                   <span className="font-bold text-[#4B2E83]">

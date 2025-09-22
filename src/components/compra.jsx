@@ -245,7 +245,7 @@ export default function Compras() {
   };
 
   return (
-    <div className="min-h-screen bg-[#C8A2C8] p-4 sm:p-6">
+    <div className="min-h-screen bg-[#f8f8f8] p-4 sm:p-6">
       {/* Cabeçalho */}
       <header className="flex items-center mb-6">
         <button onClick={() => navigate("/home")} className="p-2 rounded-full hover:bg-[#F5E1A4]">
@@ -261,12 +261,12 @@ export default function Compras() {
       ) : (
         <div className="space-y-4">
           {carrinho.map((item, index) => (
-            <div key={index} className="bg-[] p-4 rounded-xl shadow flex flex-col sm:flex-row items-center sm:justify-between gap-4">
+            <div key={index} className="bg-[#ff7b7b] p-4 rounded-xl shadow flex flex-col sm:flex-row items-center sm:justify-between gap-4">
               <div className="flex items-center space-x-4 flex-1">
                 <img src={item.img} alt={item.nome} className="w-24 h-24 object-cover rounded-lg" />
                 <div className="flex-1">
                   <h3 className="font-semibold text-[#4B2E83]">{item.nome}</h3>
-                  <p className="text-[#F4C2C2]">R$ {item.preco.toFixed(2)}</p>
+                  <p className="text-[#4B2E83]">R$ {item.preco.toFixed(2)}</p>
                   <div className="flex items-center space-x-2 mt-2">
                     <button onClick={() => diminuirQtd(index)} className="p-1 rounded-full hover:bg-[#F5E1A4]">
                       <Minus size={16} />
@@ -285,7 +285,9 @@ export default function Compras() {
           ))}
 
           {/* Cupom */}
-          <div className="bg-[] p-4 rounded-xl shadow flex  sm:flex-row items-center gap-3 mt-4">
+             <div className="bg-[] p-4 rounded-xl shadow flex  flex-col gap-3 mt-4">
+              <label className="font-semibold text-[#4B2E83]"> Aplicar Cupom:</label>
+            <div className="flex cap-2">
             <input
               type="text"
               value={cupom}
@@ -295,10 +297,11 @@ export default function Compras() {
             />
             <button
               onClick={aplicarCupom}
-              className="bg-[#ffa6a6] hover:bg-[#F5E1A4] text-[#4B2E83] px-4 py-2 rounded-xl font-semibold"
+              className="bg-[] hover:bg-[#F5E1A4] text-[#4B2E83] px-4 py-2 rounded-xl font-semibold"
             >
               Aplicar
             </button>
+            </div>
           </div>
 
           {/* Endereço / Frete */}
@@ -314,7 +317,7 @@ export default function Compras() {
               />
               <button
                 onClick={calcularFrete}
-                className="bg-[#ffa6a6] px-4 py-2 rounded-xl font-semibold text-[#4B2E83]"
+                className="bg-[] hover:bg-[#F5E1A4] px-4 py-2 rounded-xl font-semibold text-[#4B2E83]"
               >
                 Calcular
               </button>
@@ -330,19 +333,19 @@ export default function Compras() {
             <div className="flex gap-3">
               <button
                 onClick={() => setPagamento("pix")}
-                className={`px-4 py-2 rounded-xl ${pagamento === "pix" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}
+                className={`px-4 py-2 rounded-xl ${pagamento === "pix" ? "bg-[]" : "bg-[#F5E1A4]"}`}
               >
                 Pix
               </button>
               <button
                 onClick={() => setPagamento("credito")}
-                className={`px-4 py-2 rounded-xl ${pagamento === "credito" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}
+                className={`px-4 py-2 rounded-xl ${pagamento === "credito" ? "bg-[]" : "bg-[#F5E1A4]"}`}
               >
                 Crédito
               </button>
               <button
                 onClick={() => setPagamento("boleto")}
-                className={`px-4 py-2 rounded-xl ${pagamento === "boleto" ? "bg-[#ffa6a6]" : "bg-[#F5E1A4]"}`}
+                className={`px-4 py-2 rounded-xl ${pagamento === "boleto" ? "bg-[]" : "bg-[#F5E1A4]"}`}
               >
                 Boleto
               </button>
@@ -408,7 +411,7 @@ export default function Compras() {
           </div>
 
           {/* Totais */}
-          <div className="p-4 rounded-xl shadow flex flex-col gap-2 mt-4">
+          <div className="bg-[#ff7b7b]  p-4 rounded-xl shadow flex flex-col gap-2 mt-4">
             <div className="flex justify-between items-center">
               <span className="font-semibold text-[#4B2E83]">Subtotal:</span>
               <span className="font-bold text-[#4B2E83] text-lg">R$ {total.toFixed(2)}</span>

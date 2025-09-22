@@ -56,6 +56,10 @@ export default function Home() {
     navigate("/usuario");
   };
 
+   const handleHomelClick = () => {
+    navigate("/Home");
+  };
+
   const addToCart = (bolo) => {
     const carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
     carrinho.push(bolo);
@@ -166,18 +170,20 @@ export default function Home() {
           >
             Perfil
           </button>
+
            <button
-            onClick={handlePerfilClick}
+            onClick={handleHomelClick}
             className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3  font-semibold flex items-center justify-center"
           >
             Produtos
           </button>
            <button
-            onClick={handlePerfilClick}
+            onClick={handleHomelClick}
             className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3  font-semibold flex items-center justify-center"
           >
             Ajuda
           </button>
+
           <button
             onClick={handleLogout}
             className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg  font-semibold flex items-center justify-center"
@@ -276,12 +282,12 @@ export default function Home() {
          </div>
          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 text-left sm:text-left">
           <a href="#sobre" className="hover:text-[#ff7b7b] transition">Sobre</a>
-          <a href="#produtos" className="hover:text-[#ff7b7b] transition">Produtos</a>
+          <a href="/Home" className="hover:text-[#ff7b7b] transition">Produtos</a>
          </div>
           <div className="flex gap-4">
-          <a href="#" className="hover:text-[#ff7b7b] transition">Instagram</a>
-          <a href="#" className="hover:text-[#ff7b7b] transition">Facebook</a>
-          <a href="#" className="hover:text-[#ff7b7b] transition">WhatsApp</a>
+          <a href="https://www.instagram.com/" className="hover:text-[#ff7b7b] transition">Instagram</a>
+          <a href="https://www.facebook.com/?locale=pt_BR" className="hover:text-[#ff7b7b] transition">Facebook</a>
+          <a href="https://web.whatsapp.com/" className="hover:text-[#ff7b7b] transition">WhatsApp</a>
          </div>
         <p className="text-center text-sm mt-1">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
          <div className="text-2xl font-bold">Ju Doces</div>
