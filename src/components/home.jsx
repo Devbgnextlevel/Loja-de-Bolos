@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, LogOut, Menu, User } from "lucide-react";
+import { ShoppingCart, Search, LogOut, Menu, User, X } from "lucide-react";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -68,67 +68,68 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-[#ffcbff] relative">
-      {/* Navbar */}
-      <header className="bg-[#ffb2c5] shadow p-4 flex justify-between items-center sticky top-0 z-50">
+
+    <div className="min-h-screen bg-[#f8f8f8] relative">
+      
+      <header className="bg-[#f8f8f8] shadow p-4 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-bold text-[#4B2E83]">Ju Doces</h1>
           <button
-            className="sm:hidden p-2 rounded hover:bg-[#fff5d9]"
-            onClick={() => setMenuOpen(!menuOpen)}
+            className="sm:hidden p-2 rounded hover:bg-[#f8f8f8]"
+            onClick={() => setMenuOpen(true)}
           >
-            <Menu size={24} />
+            <Menu size={26} />
           </button>
         </div>
 
-        {/* Campo de busca desktop */}
-        <div className="hidden sm:flex items-center bg-[#fff6dc] rounded-lg px-3 py-1 w-1/3">
-          <Search className="text-[#4B2E83] mr-2" size={18} />
+        
+        <div className="hidden sm:flex items-center bg-[#ebdcdc] rounded-lg px-3 py-1 w-1/3">
+          <Search className="text-[#1f094a] mr-2" size={20} />
           <input
             type="text"
             placeholder="Pesquisar bolo..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent outline-none w-full text-[#4B2E83]"
+            className="bg-transparent outline-none w-full text-[##1f094a]"
           />
         </div>
 
-        {/* Botões ícones */}
-        <div className="flex space-x-3 relative items-center">
-          {/* Lupa mobile */}
-          <button
-            onClick={() => setShowMobileSearch((prev) => !prev)}
-            className="sm:hidden p-2 rounded-full hover:bg-[#F5E1A4]"
-          >
-            <Search size={24} className="text-[#4B2E83]" />
-          </button>
 
-          {/* Carrinho */}
-          <button onClick={handleCartClick} className="p-2 rounded-full hover:bg-[#F5E1A4] relative">
-            <ShoppingCart size={24} className="text-[#4B2E83]" />
-            {carrinhoCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#ffbdbd] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                {carrinhoCount}
-              </span>
-            )}
-          </button>
+        {!menuOpen && (
+          <div className="flex space-x-3 relative items-center">
+            <button
+              onClick={() => setShowMobileSearch((prev) => !prev)}
+              className="sm:hidden p-2 rounded-full hover:bg-[#ede9dc]"
+            >
+              <Search size={24} className="text-[#1f094a]" />
+            </button>
 
-          {/* Perfil */}
-          <button onClick={handlePerfilClick} className="p-2 rounded-full hover:bg-[#F5E1A4]">
-            <User size={24} className="text-[#4B2E83]" />
-          </button>
+            <button onClick={handleCartClick} className="p-2 rounded-full hover:bg-[#ede9dc] relative">
+              <ShoppingCart size={24} className="text-[#1f094a]" />
+              {carrinhoCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#fb1111] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {carrinhoCount}
+                </span>
+              )}
+            </button>
 
-          {/* Logout */}
-          <button onClick={handleLogout} className="p-2 rounded-full hover:bg-[#F5E1A4]">
-            <LogOut size={24} className="text-[#ee9393]" />
-          </button>
-        </div>
+            {/* Perfil */}
+            <button onClick={handlePerfilClick} className="p-2 rounded-full hover:bg-[#ede9dc]">
+              <User size={24} className="text-[#1f094a]" />
+            </button>
+
+            {/* Logout */}
+            <button onClick={handleLogout} className="p-2 rounded-full hover:bg-[#ede9dc]">
+              <LogOut size={24} className="text-[#c40505]" />
+            </button>
+          </div>
+        )}
       </header>
 
       {/* Campo de busca mobile */}
-      {showMobileSearch && (
-        <div className="sm:hidden px-4 py-2 bg-[#fff6dc] flex items-center animate-slide-down shadow">
-          <Search className="text-[#4B2E83] mr-2" size={18} />
+      {showMobileSearch && !menuOpen && (
+        <div className="sm:hidden px-4 py-2 bg-[#ede9dc] flex items-center animate-slide-down shadow">
+          <Search className="text-[#1f094a] mr-2" size={18} />
           <input
             type="text"
             placeholder="Pesquisar bolo..."
@@ -140,21 +141,54 @@ export default function Home() {
         </div>
       )}
 
-      {/* Menu mobile */}
+      {/* Sidebar lateral */}
       {menuOpen && (
-        <div className="sm:hidden bg-[#ffa0b7] shadow p-4 space-y-2">
-          <p className="text-[#130716] font-semibold">{nome}</p>
-          <p className="text-[#130716] font-semibold">{email}</p>
-          <div className="flex space-x-2 gap-4" >
-            <button onClick={handleCartClick} className="flex-1 bg-[#f88d87] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
-              Carrinho
+        <div className="fixed top-0 left-0 w-64 h-full bg-[#f8f8f8] shadow-lg z-50 p-6 flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-[#4B2E83]">JuDoces</h2>
+            <button onClick={() => setMenuOpen(false)}>
+              <X size={24} className="text-[#4B2E83]" />
             </button>
-            <button onClick={handlePerfilClick} className="flex-1 bg-[#f88d87] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
-              Perfil
-            </button>
-            <button onClick={handleLogout} className="flex-1 bg-[#f88d87] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg">
-              Sair
-            </button>
+          </div>
+
+          <br />
+
+          <div className="flex flex-col mt-16 space-y-2 mb-6">
+          <button
+            onClick={handleCartClick}
+            className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3 font-semibold flex items-center justify-center"
+          >
+            Carrinho ({carrinhoCount})
+          </button>
+          <button
+            onClick={handlePerfilClick}
+            className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3  font-semibold flex items-center justify-center"
+          >
+            Perfil
+          </button>
+           <button
+            onClick={handlePerfilClick}
+            className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3  font-semibold flex items-center justify-center"
+          >
+            Produtos
+          </button>
+           <button
+            onClick={handlePerfilClick}
+            className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3  font-semibold flex items-center justify-center"
+          >
+            Ajuda
+          </button>
+          <button
+            onClick={handleLogout}
+            className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg  font-semibold flex items-center justify-center"
+          >
+            Sair
+          </button>
+          </div>
+          
+          <div className="mt-auto text-center text-[#4B2E83]">
+           <p className="text-center text-sm mt-1">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
+           <div className="text-2xl font-bold">Ju Doces</div>
           </div>
         </div>
       )}
@@ -164,35 +198,64 @@ export default function Home() {
         <h2 className="text-xl font-semibold text-[#4B2E83]">{nome}</h2>
         <p className="text-[#ffaac0]">{email}</p>
       </div>
+      
 
       {/* Vitrine de bolos */}
-      <main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-12">
-        {filteredBolos.map((bolo) => (
-          <div
-            key={bolo.id}
-            className="bg-[#ffb8ca] rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col"
-          >
-            <img src={bolo.img} alt={bolo.nome} className="w-full h-40 object-cover" />
-            <div className="p-4 text-center flex-1 flex flex-col justify-between">
-              <div>
-                <h3 className="text-lg font-bold text-[#4B2E83]">{bolo.nome}</h3>
-                <p className="text-[#ffa9a9] mb-3">R$ {bolo.preco.toFixed(2)}</p>
-              </div>
-              <button
-                onClick={() => addToCart(bolo)}
-                className="w-full bg-[#ff7b7b] hover:bg-[#F5E1A4] text-[#4B2E83] py-2 rounded-lg mt-2 font-semibold"
+<main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  {filteredBolos.map((bolo) => (
+    <div
+      key={bolo.id}
+      className="bg-[#ffb8ca] rounded-xl shadow-md overflow-hidden transform transition hover:shadow-lg hover:scale-105 flex flex-col"
+    >
+      {/* Imagem menor */}
+      <img
+        src={bolo.img}
+        alt={bolo.nome}
+        className="w-full aspect-[3/2] object-cover"
+      />
+
+      {/* Informações do bolo */}
+      <div className="p-3 flex flex-col justify-between flex-1">
+        <div className="text-center">
+          <h3 className="text-md font-bold text-[#4B2E83]">{bolo.nome}</h3>
+          <p className="text-xs text-[#4B2E83] mb-2">{bolo.descricao}</p>
+
+          {/* Tags menores */}
+          <div className="flex justify-center gap-1 flex-wrap mb-2">
+            {bolo.tags?.map((tag) => (
+              <span
+                key={tag}
+                className="bg-[#fff3f7] text-[#4B2E83] text-xs px-1.5 py-0.5 rounded-full"
               >
-                Adicionar ao carrinho
-              </button>
-            </div>
+                {tag}
+              </span>
+            ))}
           </div>
-        ))}
-      </main>
+
+          <p className="text-[#131313] font-semibold text-md mb-2">
+            R$ {bolo.preco.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Botão menor */}
+        <button
+          onClick={() => addToCart(bolo)}
+          className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-1.5 rounded-lg font-semibold shadow-sm hover:shadow-md transition flex items-center justify-center gap-1"
+        >
+          Adicionar 🛒
+        </button>
+      </div>
+    </div>
+  ))}
+</main>
+
+
 
       {/* Seção de Contato */}
-      <footer className="bg-[#ffb2c5] mt-15 p-6 rounded-t-3xl shadow-inner text-[#4B2E83]">
+      <footer className="bg-[#ffb2c5] p-6 flex flex-col items-center gap-4 text-[#4B2E83]">
         <h2 className="text-xl font-bold mb-8 text-left">Contato</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-1 gap-7 text-left sm:text-left">
+       
+         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-left sm:text-left">
           <div>
             <p className="font-semibold">Telefone:</p>
             <p>(11) 99999-9999</p>
@@ -209,40 +272,33 @@ export default function Home() {
             <p className="font-semibold">Trabalhe Conosco:</p>
             <p>envie seu currículo para rh@judoces.com</p>
           </div>
-        </div>
-        <p className="text-center text-sm mt-5">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
+          <br />
+         </div>
+         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 text-left sm:text-left">
+          <a href="#sobre" className="hover:text-[#ff7b7b] transition">Sobre</a>
+          <a href="#produtos" className="hover:text-[#ff7b7b] transition">Produtos</a>
+         </div>
+          <div className="flex gap-4">
+          <a href="#" className="hover:text-[#ff7b7b] transition">Instagram</a>
+          <a href="#" className="hover:text-[#ff7b7b] transition">Facebook</a>
+          <a href="#" className="hover:text-[#ff7b7b] transition">WhatsApp</a>
+         </div>
+        <p className="text-center text-sm mt-1">&copy; 2025 Ju Doces. Todos os direitos reservados.</p>
+         <div className="text-2xl font-bold">Ju Doces</div>
       </footer>
-
-
-
-      {/* Toast
-      {showToast && (
-        <div className="fixed bottom-6 right-6 bg-[#4B2E83] text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in-out">
-          {toastMessage}
-        </div>
-      )} */}
 
 
       {/* Estilos adicionais */}
       <style>{`
-        .animate-fade-in-out {
-          animation: fadeInOut 3s forwards;
+        .animate-slide-down {
+          animation: slideDown 0.3s ease-out;
         }
-        @keyframes fadeInOut {
-          0% { opacity: 0; transform: translateY(20px); }
-          10% { opacity: 1; transform: translateY(0); }
-          90% { opacity: 1; transform: translateY(0); }
-          100% { opacity: 0; transform: translateY(20px); }
-        }
-
         @keyframes slideDown {
           0% { opacity: 0; transform: translateY(-10px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-slide-down {
-          animation: slideDown 0.3s ease-out;
-        }
       `}</style>
+
     </div>
   );
 }
