@@ -1,4 +1,3 @@
-import './App.css'
 import RoutesApp from "./routes/RoutesApp.jsx";
 import { BrowserRouter } from 'react-router-dom';
 
