@@ -8,12 +8,21 @@ export default function Forms() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
 
   const handleEnviar = () => {
-    if (nome && email && telefone) {
-      localStorage.setItem("usuario", JSON.stringify({ nome, email, telefone }));
-      console.log("Formulário enviado com sucesso!", { nome, email, telefone });
-      navigate("/"); 
+    if (nome && email && telefone && dataNascimento) {
+      localStorage.setItem(
+        "usuario",
+        JSON.stringify({ nome, email, telefone, dataNascimento })
+      );
+      console.log("Formulário enviado com sucesso!", {
+        nome,
+        email,
+        telefone,
+        dataNascimento,
+      });
+      navigate("/");
     } else {
       alert("Preencha todos os campos!");
     }
@@ -32,11 +41,24 @@ export default function Forms() {
     setTelefone(value);
   };
 
-  
   const handleEmailChange = (e) => {
     let value = e.target.value;
     if (value.length > 25) value = value.slice(0, 25);
     setEmail(value);
+  };
+
+  const handleDataNascimentoChange = (e) => {
+    let value = e.target.value.replace(/\D/g, ""); // só números
+    if (value.length > 8) value = value.slice(0, 8);
+
+    // Formata em dd/mm/yyyy
+    if (value.length >= 5) {
+      value = value.replace(/(\d{2})(\d{2})(\d{0,4})/, "$1/$2/$3");
+    } else if (value.length >= 3) {
+      value = value.replace(/(\d{2})(\d{0,2})/, "$1/$2");
+    }
+
+    setDataNascimento(value);
   };
 
   return (
@@ -50,7 +72,7 @@ export default function Forms() {
             Cadastro
           </h2>
 
-         
+          {/* Nome */}
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-1">Nome</label>
             <input
@@ -62,7 +84,7 @@ export default function Forms() {
             />
           </div>
 
-          
+          {/* Email */}
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-1">Email</label>
             <input
@@ -74,9 +96,11 @@ export default function Forms() {
             />
           </div>
 
-       
+          {/* Telefone */}
           <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-1">Telefone</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Telefone
+            </label>
             <input
               type="tel"
               placeholder="(11) 99999-9999"
@@ -86,7 +110,22 @@ export default function Forms() {
             />
           </div>
 
-          
+          {/* Data de Nascimento */}
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-1">
+              Data de Nascimento
+            </label>
+            <input
+              type="text"
+              placeholder="dd/mm/aaaa"
+              className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={dataNascimento}
+              onChange={handleDataNascimentoChange}
+              maxLength={10}
+            />
+          </div>
+
+          {/* Termos */}
           <div className="flex items-center mb-6">
             <input
               type="checkbox"
@@ -98,10 +137,10 @@ export default function Forms() {
             </label>
           </div>
 
-         
+          {/* Botões */}
           <div className="flex gap-4">
             <button
-              onClick={() => navigate(-1)} 
+              onClick={() => navigate(-1)}
               type="button"
               className="w-1/2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-xl transition duration-200"
             >

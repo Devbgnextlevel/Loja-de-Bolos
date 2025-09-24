@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Trash2, Plus, Minus } from "lucide-react";
-import {
-  boleto, // valida qualquer boleto (bancário ou de arrecadação), com ou sem máscara
-  boletoBancario,
-  boletoArrecadacao,
-  boletoBancarioLinhaDigitavel,
-  boletoArrecadacaoLinhaDigitavel
-} from "boleto-brasileiro-validator";
-
+import { boleto } from "boleto-brasileiro-validator";
 
 export default function Compras() {
   const navigate = useNavigate();
@@ -16,25 +9,22 @@ export default function Compras() {
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
 
-  // novos estados
   const [cep, setCep] = useState("");
   const [frete, setFrete] = useState(0);
   const [pagamento, setPagamento] = useState(null);
 
-  // estados do cartão de crédito
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
-  const [cardExpiry, setCardExpiry] = useState("");  // formato “MM/AA” ou “MM/AAAA”
+  const [cardExpiry, setCardExpiry] = useState("");
   const [cardCVV, setCardCVV] = useState("");
 
-  // novos estados para boleto
   const [boletoLinha, setBoletoLinha] = useState("");
   const [erroBoleto, setErroBoleto] = useState("");
 
   useEffect(() => {
     const itens = JSON.parse(localStorage.getItem("carrinho") || "[]");
     const itensComQtd = itens.reduce((acc, item) => {
-      const existe = acc.find(i => i.id === item.id);
+      const existe = acc.find((i) => i.id === item.id);
       if (existe) {
         existe.qtd += 1;
       } else {
@@ -45,12 +35,16 @@ export default function Compras() {
     setCarrinho(itensComQtd);
   }, []);
 
-
   const salvarCarrinho = (novoCarrinho) => {
     const arrParaStorage = [];
-    novoCarrinho.forEach(item => {
+    novoCarrinho.forEach((item) => {
       for (let i = 0; i < item.qtd; i++) {
-        arrParaStorage.push({ id: item.id, nome: item.nome, preco: item.preco, img: item.img });
+        arrParaStorage.push({
+          id: item.id,
+          nome: item.nome,
+          preco: item.preco,
+          img: item.img,
+        });
       }
     });
     localStorage.setItem("carrinho", JSON.stringify(arrParaStorage));
@@ -92,23 +86,14 @@ export default function Compras() {
     }
   };
 
-  // Funções de validação simples
-  const onlyDigits = (str) => {
-    return str.replace(/\D/g, "");
-  };
-  
+  const onlyDigits = (str) => str.replace(/\D/g, "");
 
-  const validarCEP = (cep) => {
-    const clean = onlyDigits(cep);
-    return clean.length === 8;
-  };
+  const validarCEP = (cep) => onlyDigits(cep).length === 8;
 
-
-    const validarNumeroCartao = (num) => {
+  const validarNumeroCartao = (num) => {
     const clean = onlyDigits(num);
     return clean.length >= 13 && clean.length <= 19;
   };
-
 
   const validarValidade = (val) => {
     if (!val) return false;
@@ -122,18 +107,14 @@ export default function Compras() {
     const currentYearFull = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
 
-    // se o ano vier como 2 dígitos, considerar 2000 + yy
-    if (parts[1].length === 2) {
-      yy += 2000;
-    }
+    if (parts[1].length === 2) yy += 2000;
     if (isNaN(yy)) return false;
 
     if (yy < currentYearFull) return false;
     if (yy === currentYearFull && mm < currentMonth) return false;
 
-
     return true;
-   };
+  };
 
   const validarCVV = (cvv) => {
     const clean = onlyDigits(cvv);
@@ -165,23 +146,18 @@ export default function Compras() {
       return;
     }
 
-    const valor = Math.floor(Math.random() * 20) + 10; // frete fictício entre 10 e 30
+    const valor = Math.floor(Math.random() * 20) + 10;
     setFrete(valor);
     alert(`Frete calculado: R$ ${valor.toFixed(2)}`);
-   };
-
-  const validarBoletoLinha = (linha) => {
-    const clean = linha.replace(/\s/g, "");
-    // usa a lib para validar boleto completo
-    return boleto(clean);
   };
+
+  const validarBoletoLinha = (linha) => boleto(linha.replace(/\s/g, ""));
 
   const finalizarCompra = () => {
     if (!pagamento) {
       alert("Selecione uma forma de pagamento antes de finalizar.");
       return;
     }
-
     if (!validarCEP(cep)) {
       alert("Digite um CEP válido antes de finalizar.");
       return;
@@ -208,7 +184,6 @@ export default function Compras() {
       }
     }
 
-    // Prossegue com “compra fictícia”
     const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
     const historico = usuario.historico || [];
     historico.push({
@@ -220,14 +195,11 @@ export default function Compras() {
       cep,
       pagamento,
       boletoLinha: pagamento === "boleto" ? boletoLinha : null,
-      // não guardar dados do cartão
     });
 
     localStorage.setItem("usuario", JSON.stringify({ ...usuario, historico }));
     localStorage.removeItem("carrinho");
     setCarrinho([]);
-
-    // limpar campos
     setCardNumber("");
     setCardName("");
     setCardExpiry("");
@@ -239,131 +211,159 @@ export default function Compras() {
     setCupom("");
     setBoletoLinha("");
     setErroBoleto("");
-
     alert("Compra finalizada! Obrigado.");
     navigate("/Perfil");
   };
 
   return (
+    
     <div className="min-h-screen bg-[#f8f8f8] p-4 sm:p-6">
       {/* Cabeçalho */}
       <header className="flex items-center mb-6">
-        <button onClick={() => navigate("/home")} className="p-2 rounded-full hover:bg-[#F5E1A4]">
+        <button
+          onClick={() => navigate("/home")}
+          className="p-3 rounded-full hover:shadow-lg transition-shadow duration-200"
+        >
           <ArrowLeft size={24} className="text-[#4B2E83]" />
         </button>
-        <h1 className="ml-3 text-2xl font-bold text-[#4B2E83]">Carrinho de Compras</h1>
+        <h1 className="ml-4 text-2xl font-medium text-[#4B2E83] tracking-wide">
+          Carrinho de Compras
+        </h1>
       </header>
 
       {carrinho.length === 0 ? (
-        <div className="bg-[#de6f8a] rounded-2xl shadow-lg p-6 text-center">
-          <p className="text-[#4B2E83]">Seu carrinho está vazio.</p>
+        <div className="bg-[#4B2E83] rounded-2xl shadow-2xl p-6 text-center backdrop-blur-sm">
+          <p className="text-[#ffffff] font-medium ">Seu carrinho está vazio.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
+          {/* Itens do carrinho */}
           {carrinho.map((item, index) => (
-            <div key={index} className="bg-[#ff7b7b] p-4 rounded-xl shadow flex flex-col sm:flex-row items-center sm:justify-between gap-4">
-              <div className="flex items-center space-x-4 flex-1">
-                <img src={item.img} alt={item.nome} className="w-24 h-24 object-cover rounded-lg" />
+            <div
+              key={index}
+              className="bg-[#4B2E83] p-4 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center sm:justify-between gap-4 hover:scale-100 transition-transform duration-200"
+            >
+              <div className="flex items-center space-x-15 flex-4 mr-4">
+                <img
+                  src={item.img}
+                  alt={item.nome}
+                  className="w-29 h-24 object-cover rounded-2xl shadow-md"
+                />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-[#4B2E83]">{item.nome}</h3>
-                  <p className="text-[#4B2E83]">R$ {item.preco.toFixed(2)}</p>
-                  <div className="flex items-center space-x-2 mt-2">
-                    <button onClick={() => diminuirQtd(index)} className="p-1 rounded-full hover:bg-[#F5E1A4]">
+                  <h3 className="font-extrabold text-[#ffffff] font-medium">{item.nome}</h3>
+                  <p className="text-[#ffffff] font-medium">R$ {item.preco.toFixed(2)}</p>
+                  <div className="text-[#ffffff] flex items-center space-x-2 mt-2">
+                    <button
+                      onClick={() => diminuirQtd(index)}
+                      className="p-2 rounded-full hover:shadow-md transition-shadow duration-200"
+                    >
                       <Minus size={16} />
                     </button>
-                    <span className="w-6 text-center">{item.qtd}</span>
-                    <button onClick={() => aumentarQtd(index)} className="p-1 rounded-full hover:bg-[#F5E1A4]">
+                    <span className="w-6 text-center font-semibold">{item.qtd}</span>
+                    <button
+                      onClick={() => aumentarQtd(index)}
+                      className="p-2 rounded-full hover:shadow-md transition-shadow duration-200"
+                    >
                       <Plus size={16} />
                     </button>
                   </div>
                 </div>
               </div>
-              <button onClick={() => removerItem(index)} className="p-2 rounded-full hover:bg-[#F5E1A4]">
-                <Trash2 size={20} className="text-[#edcdcd]" />
+
+              <button
+                onClick={() => removerItem(index)}
+                className=" p-2 rounded-full hover:shadow-md transition-shadow duration-200"
+              >
+                <Trash2 size={20} className=" text-[##4B2E83]" />
               </button>
             </div>
           ))}
 
           {/* Cupom */}
-             <div className="bg-[] p-4 rounded-xl shadow flex  flex-col gap-3 mt-4">
-              <label className="font-semibold text-[#4B2E83]"> Aplicar Cupom:</label>
-            <div className="flex cap-2">
-            <input
-              type="text"
-              value={cupom}
-              onChange={(e) => setCupom(e.target.value)}
-              placeholder="Digite seu cupom"
-              className="flex-1 p-2 rounded-lg border border-[#4B2E83] outline-none"
-            />
-            <button
-              onClick={aplicarCupom}
-              className="bg-[] hover:bg-[#F5E1A4] text-[#4B2E83] px-4 py-2 rounded-xl font-semibold"
-            >
-              Aplicar
-            </button>
+          <div className="bg-white/80 p-4 rounded-2xl shadow-2xl backdrop-blur-sm flex flex-col gap-3">
+            <label className="font-medium text-[#4B2E83] tracking-wide">
+              Aplicar Cupom:
+            </label>
+            <div className="flex gap-9">
+              <input
+                type="text"
+                value={cupom}
+                onChange={(e) => setCupom(e.target.value)}
+                placeholder="Digite seu cupom"
+                className="flex-1 p-3 rounded-2xl border border-[#4B2E83] outline-none focus:ring-4 focus:ring-[#e4d7ff] transition duration-400"
+              />
+              <button
+                onClick={aplicarCupom}
+                className="bg-gradient-to-r from-[#4B2E83] to-[#4B2E83] px-4 py-2 rounded-3xl font-semibold shadow-md hover:translate-y-0.5 transition-transform duration-200"
+              >
+                Aplicar
+              </button>
             </div>
           </div>
 
           {/* Endereço / Frete */}
-          <div className="bg-[] p-4 rounded-xl shadow flex flex-col gap-3 mt=4">
-            <label className="font-semibold text-[#4B2E83]">Taxa para entrega:</label>
-            <div className="flex gap-2">
+          <div className="bg-white/80 p-4 rounded-2xl shadow-2xl backdrop-blur-sm flex flex-col gap-3">
+            <label className="font-medium text-[#4B2E83] tracking-wide">
+              Taxa para entrega:
+            </label>
+            <div className="flex gap-9">
               <input
                 type="text"
                 value={cep}
                 onChange={(e) => setCep(e.target.value)}
                 placeholder="Digite o CEP"
-                className="flex-1 p-2 rounded-lg border border-[#4B2E83] outline-none"
+                className="flex-1 p-3 rounded-2xl border border-[#4B2E83] outline-none focus:ring-4 focus:ring-[#e4d7ff] transition duration-400"
               />
               <button
                 onClick={calcularFrete}
-                className="bg-[] hover:bg-[#F5E1A4] px-4 py-2 rounded-xl font-semibold text-[#4B2E83]"
+                className="bg-gradient-to-r from-[#4B2E83] to-[#4B2E83] px-4 py-2 rounded-3xl font-semibold shadow-md hover:translate-y-0.5 transition-transform duration-200"
               >
                 Calcular
               </button>
             </div>
             {frete > 0 && (
-              <p className="text-[#4B2E83]">Frete: R$ {frete.toFixed(2)}</p>
+              <p className="text-[#4B2E83] font-semibold">Frete: R$ {frete.toFixed(2)}</p>
             )}
           </div>
 
           {/* Forma de Pagamento */}
-          <div className="bg-[] p-4 rounded-xl shadow flex flex-col gap-3 mt-4">
-            <label className="font-semibold text-[#4B2E83]">Forma de pagamento:</label>
+          <div className="bg-white/80 p-4 rounded-2xl shadow-2xl backdrop-blur-sm flex flex-col gap-3">
+            <label className="font-medium text-[#4B2E83] tracking-wide">
+              Forma de pagamento:
+            </label>
             <div className="flex gap-3">
-              <button
-                onClick={() => setPagamento("pix")}
-                className={`px-4 py-2 rounded-xl ${pagamento === "pix" ? "bg-[]" : "bg-[#F5E1A4]"}`}
-              >
-                Pix
-              </button>
-              <button
-                onClick={() => setPagamento("credito")}
-                className={`px-4 py-2 rounded-xl ${pagamento === "credito" ? "bg-[]" : "bg-[#F5E1A4]"}`}
-              >
-                Crédito
-              </button>
-              <button
-                onClick={() => setPagamento("boleto")}
-                className={`px-4 py-2 rounded-xl ${pagamento === "boleto" ? "bg-[]" : "bg-[#F5E1A4]"}`}
-              >
-                Boleto
-              </button>
+              {["pix", "credito", "boleto"].map((tipo) => (
+                <button
+                  key={tipo}
+                  onClick={() => setPagamento(tipo)}
+                  className={`px-4 py-2 rounded-2xl shadow-md font-semibold transition-transform duration-200 ${
+                    pagamento === tipo
+                      ? "bg-gradient-to-r from-[#ffffff] to-[#e0d4fa] scale-105"
+                      : "bg-[#e4d7ff] hover:scale-105"
+                  }`}
+                >
+                  {tipo === "pix"
+                    ? "Pix"
+                    : tipo === "credito"
+                    ? "Crédito"
+                    : "Boleto"}
+                </button>
+              ))}
             </div>
 
             {pagamento === "credito" && (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3 mt-2">
                 <input
                   type="text"
                   placeholder="Número do cartão"
-                  className="p-2 border rounded-lg"
+                  className="p-3 border rounded-2xl outline-none focus:ring-4 focus:ring-[#e0d4fa] transition duration-300"
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Nome impresso"
-                  className="p-2 border rounded-lg"
+                  className="p-3 border rounded-2xl outline-none focus:ring-4 focus:ring-[#e0d4fa] transition duration-300"
                   value={cardName}
                   onChange={(e) => setCardName(e.target.value)}
                 />
@@ -371,50 +371,54 @@ export default function Compras() {
                   <input
                     type="text"
                     placeholder="Validade (MM/AA)"
-                    className="p-2 border rounded-lg flex-1"
+                    className="p-3 border rounded-2xl outline-none focus:ring-4 focus:ring-[#e0d4fa] flex-1 transition duration-300"
                     value={cardExpiry}
                     onChange={(e) => setCardExpiry(e.target.value)}
                   />
                   <input
                     type="text"
                     placeholder="CVV"
-                    className="p-2 border rounded-lg w-20"
+                    className="p-3 border rounded-2xl w-24 outline-none focus:ring-4 focus:ring-[#e0d4fa] transition duration-300"
                     value={cardCVV}
                     onChange={(e) => setCardCVV(e.target.value)}
                   />
                 </div>
-                <select className="p-2 border rounded-lg">
+                <select className="p-3 border rounded-2xl outline-none focus:ring-4 focus:ring-[#e0d4fa] transition duration-300">
                   <option>1x sem juros</option>
                   <option>2x sem juros</option>
                   <option>3x sem juros</option>
-                   <option>4x sem juros</option>
-                   <option>5x sem juros</option>
+                  <option>4x sem juros</option>
+                  <option>5x sem juros</option>
                 </select>
               </div>
             )}
 
             {pagamento === "boleto" && (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 mt-2">
                 <input
                   type="text"
                   placeholder="Linha digitável do boleto"
-                  className={`p-2 border rounded-lg ${erroBoleto ? "border-red-500" : ""}`}
+                  className={`p-3 border rounded-2xl outline-none focus:ring-4 focus:ring-[#e0d4fa] transition duration-300 ${
+                    erroBoleto ? "border-red-500" : ""
+                  }`}
                   value={boletoLinha}
                   onChange={(e) => {
                     setBoletoLinha(e.target.value);
                     if (erroBoleto) setErroBoleto("");
                   }}
                 />
-                {erroBoleto && <p className="text-red-600">{erroBoleto}</p>}
+                {erroBoleto && <p className="text-red-600 font-semibold">{erroBoleto}</p>}
               </div>
             )}
           </div>
 
           {/* Totais */}
-          <div className="bg-[#ff7b7b]  p-4 rounded-xl shadow flex flex-col gap-2 mt-4">
+          <div className="bg-[#ffffff] p-4 rounded-2xl shadow-2xl flex flex-col gap-2 mt-4">
             <div className="flex justify-between items-center">
-              <span className="font-semibold text-[#4B2E83]">Subtotal:</span>
-              <span className="font-bold text-[#4B2E83] text-lg">R$ {total.toFixed(2)}</span>
+              <span className="font-bold text-[#4B2E83] text-lg">Subtotal:</span>
+              <span className="font-bold text-[#4B2E83] text-lg">
+                R$ {total.toFixed(2)}
+              </span>
             </div>
             {desconto > 0 && (
               <div className="flex justify-between items-center text-green-700">
@@ -429,15 +433,16 @@ export default function Compras() {
               </div>
             )}
             <div className="flex justify-between items-center">
-              <span className="font-semibold text-[#4B2E83]">Total:</span>
-              <span className="font-bold text-[#4B2E83] text-lg">R$ {totalFinal.toFixed(2)}</span>
+              <span className="font-extrabold text-[#4B2E83]">Total:</span>
+              <span className="font-bold text-[#4B2E83] text-lg">
+                R$ {totalFinal.toFixed(2)}
+              </span>
             </div>
           </div>
 
-
           <button
             onClick={finalizarCompra}
-            className="w-full bg-[#ffa6a6] hover:bg-[#F5E1A4] text-[#4B2E83] py-3 rounded-xl mt-4 font-semibold"
+            className="w-full bg-gradient-to-r from-[#ffffffa4] to-[#e4d7ff] hover:translate-y-0.5 text-[#4B2E83] py-3 rounded-2xl mt-4 font-extrabold shadow-md transition-transform duration-200"
           >
             Finalizar Compra
           </button>
@@ -446,3 +451,4 @@ export default function Compras() {
     </div>
   );
 }
+
