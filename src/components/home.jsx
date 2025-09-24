@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart, Search, LogOut, Menu, User, X } from "lucide-react";
+// import SwiperCore from 'swiper';
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
+import 'swiper/css';
+import 'swiper/css/pagination';
 import { Pagination } from "swiper/modules";
 
 
@@ -213,24 +214,37 @@ export default function Home() {
       
 
   <main className="p-6 flex flex-col items-center gap-8">
-   <div className="w-[300px] h-[500px] bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-    <img
-      src="https://via.placeholder.com/400x250?text=Oferta+do+Dia"
-      alt="Oferta do Dia"
-      className="w-full h-1/2 object-cover"
-    />
-    <div className="p-4">
-      <h2 className="text-lg font-bold text-gray-800 mb-1">Oferta do Dia</h2>
-      <p className="text-sm text-gray-600 mb-1">Bolo Especial de Chocolate</p>
-      <p className="text-xs text-gray-400 line-through">R$ 89,90</p>
-      <p className="text-xl font-bold text-green-700">R$ 44,90</p>
-      <p className="text-xs text-green-600">50% OFF</p>
-      <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
-      <button className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition">
-        Comprar Agora 🛒
-      </button>
+  {bolos.length > 0 && (
+    <div className="w-[300px] h-[500px] bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <img
+        src="https://via.placeholder.com/400x250?text=Oferta+do+Dia"
+        alt="Oferta do Dia"
+        className="w-full h-1/2 object-cover"
+      />
+      <div className="p-4">
+        <h2 className="text-lg font-bold text-gray-800 mb-1">Oferta do Dia</h2>
+        <p className="text-sm text-gray-600 mb-1">{bolos[0].nome}</p>
+        <p className="text-xs text-gray-400 line-through">
+          R$ {(bolos[0].preco * 1.2).toFixed(2)}
+        </p>
+        <p className="text-xl font-bold text-green-700">
+          R$ {bolos[0].preco.toFixed(2)}
+        </p>
+        <p className="text-xs text-green-600">
+          {Math.round(((bolos[0].preco * 1.2 - bolos[0].preco) / (bolos[0].preco * 1.2)) * 100)}% OFF
+        </p>
+        <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
+        <button
+          onClick={() => addToCart(bolos[0])}
+          className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition"
+        >
+          Comprar Agora 🛒
+        </button>
+      </div>
     </div>
-  </div> 
+  )}
+</main>
+
 
                         
   <div className="w-full ml-2 mt-11">
@@ -331,7 +345,7 @@ export default function Home() {
                );
              })}
                </div>
-           </main>
+          
 
 
 
