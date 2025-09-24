@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart, Search, LogOut, Menu, User, X } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+
 
 export default function Home() {
   const navigate = useNavigate();
@@ -199,67 +204,141 @@ export default function Home() {
         </div>
       )}
 
-      {/* Boas-vindas */}
       <div className="text-center py-4 px-2 sm:px-4">
-        <h2 className="text-xl font-semibold text-[#4B2E83]">{nome}</h2>
+        <h2 className="text-xl font-semibold text-[#4B2E83]">
+          Olá {nome}, aproveite as promoções!
+       </h2>
         <p className="text-[#ffaac0]">{email}</p>
       </div>
       
 
-      {/* Vitrine de bolos */}
-<main className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-  {filteredBolos.map((bolo) => (
-    <div
-      key={bolo.id}
-      className="bg-[#ffb8ca] rounded-xl shadow-md overflow-hidden transform transition hover:shadow-lg hover:scale-105 flex flex-col"
-    >
-      {/* Imagem menor */}
-      <img
-        src={bolo.img}
-        alt={bolo.nome}
-        className="w-full aspect-[3/2] object-cover"
-      />
-
-      {/* Informações do bolo */}
-      <div className="p-3 flex flex-col justify-between flex-1">
-        <div className="text-center">
-          <h3 className="text-md font-bold text-[#4B2E83]">{bolo.nome}</h3>
-          <p className="text-xs text-[#4B2E83] mb-2">{bolo.descricao}</p>
-
-          {/* Tags menores */}
-          <div className="flex justify-center gap-1 flex-wrap mb-2">
-            {bolo.tags?.map((tag) => (
-              <span
-                key={tag}
-                className="bg-[#fff3f7] text-[#4B2E83] text-xs px-1.5 py-0.5 rounded-full"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <p className="text-[#131313] font-semibold text-md mb-2">
-            R$ {bolo.preco.toFixed(2)}
-          </p>
-        </div>
-
-        {/* Botão menor */}
-        <button
-          onClick={() => addToCart(bolo)}
-          className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-1.5 rounded-lg font-semibold shadow-sm hover:shadow-md transition flex items-center justify-center gap-1"
-        >
-          Adicionar 🛒
-        </button>
-      </div>
+  <main className="p-6 flex flex-col items-center gap-8">
+   <div className="w-[300px] h-[500px] bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+    <img
+      src="https://via.placeholder.com/400x250?text=Oferta+do+Dia"
+      alt="Oferta do Dia"
+      className="w-full h-1/2 object-cover"
+    />
+    <div className="p-4">
+      <h2 className="text-lg font-bold text-gray-800 mb-1">Oferta do Dia</h2>
+      <p className="text-sm text-gray-600 mb-1">Bolo Especial de Chocolate</p>
+      <p className="text-xs text-gray-400 line-through">R$ 89,90</p>
+      <p className="text-xl font-bold text-green-700">R$ 44,90</p>
+      <p className="text-xs text-green-600">50% OFF</p>
+      <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
+      <button className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition">
+        Comprar Agora 🛒
+      </button>
     </div>
-  ))}
-</main>
+  </div> 
+
+                        
+  <div className="w-full ml-2 mt-11">
+  <Swiper
+    slidesPerView={1}
+    spaceBetween={15}
+    pagination={{ clickable: true }} 
+    modules={[Pagination]}
+    breakpoints={{
+      640: { slidesPerView: 2 },
+      768: { slidesPerView: 3 },
+      1024: { slidesPerView: 4 },
+    }}
+    className="mySwiper"
+  >
+    {filteredBolos.map((bolo) => {
+      const precoAntigo = bolo.preco * 1.2;
+      const desconto = Math.round(((precoAntigo - bolo.preco) / precoAntigo) * 100);
+
+      return (
+        <SwiperSlide key={bolo.id}>
+          <div className="w-[300px] h-[400px] bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden flex flex-col mx-auto">
+            <img src={bolo.img} alt={bolo.nome} className="w-full h-1/2 object-cover" />
+            <div className="p-3 flex flex-col flex-1">
+              <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-1">{bolo.nome}</h3>
+              <div className="mb-2">
+                <p className="text-xs text-gray-400 line-through">R$ {precoAntigo.toFixed(2)}</p>
+                <p className="text-lg font-bold text-green-700">R$ {bolo.preco.toFixed(2)}</p>
+                <p className="text-xs text-green-600">{desconto}% OFF</p>
+              </div>
+              <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
+              <button
+                onClick={() => addToCart(bolo)}
+                className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition mt-auto"
+              >
+                Adicionar ao carrinho 🛒
+              </button>
+            </div>
+          </div>
+          <br />
+          <br />
+          <br />
+        </SwiperSlide>
+      );
+    })}
+  </Swiper>
+</div> 
+
+
+
+       <div className="flex flex-wrap justify-center gap-6">
+          {filteredBolos.map((bolo) => {
+       const precoAntigo = bolo.preco * 1.2;
+        const desconto = Math.round(((precoAntigo - bolo.preco) / precoAntigo) * 100);
+
+      return (
+        
+        <div
+          key={bolo.id}
+          className="w-[300px] h-[400px] mt-8 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden flex flex-col"
+        >
+          {/* Imagem */}
+          <img
+            src={bolo.img}
+            alt={bolo.nome}
+            className="w-full h-1/2 object-cover"
+          />
+
+          {/* Informações */}
+          <div className="p-3 flex flex-col flex-1">
+            <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-1">
+              {bolo.nome}
+            </h3>
+
+            {/* Preços */}
+            <div className="mb-2">
+              <p className="text-xs text-gray-400 line-through">
+                R$ {precoAntigo.toFixed(2)}
+              </p>
+              <p className="text-lg font-bold text-green-700">
+                R$ {bolo.preco.toFixed(2)}
+              </p>
+              <p className="text-xs text-green-600">{desconto}% OFF</p>
+            </div>
+
+            {/* Frete grátis */}
+            <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
+
+            {/* Botão */}
+            <button
+              onClick={() => addToCart(bolo)}
+              className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition mt-auto"
+            >
+              Adicionar ao carrinho 🛒
+                  </button>
+                 </div>
+                  </div>
+               );
+             })}
+               </div>
+           </main>
+
 
 
 
       {/* Seção de Contato */}
-      <footer className="bg-[#ffb2c5] p-6 flex flex-col items-center gap-4 text-[#4B2E83]">
-        <h2 className="text-xl font-bold mb-8 text-left">Contato</h2>
+      <footer className="bg-[#ffb2c5] p-6 flex flex-col items-center gap-4 mt-52 text-[#4B2E83]">
+        {/* <h2 className="text-xl font-bold mb-8 text-left">Contato</h2> */}
        
          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-left sm:text-left">
           <div>
