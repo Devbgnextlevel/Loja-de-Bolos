@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, LogOut, Menu, User, X } from "lucide-react";
-// import SwiperCore from 'swiper';
+import { ShoppingCart, Search, LogOut, Menu, User, X, Package, 
+  HelpCircle } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination } from "swiper/modules";
-
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,6 +17,35 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
+  // 🔹 Ofertas do dia (carrossel automático)
+  const ofertas = [
+    {
+      id: 1,
+      nome: "Bolo Especial de Chocolate",
+      precoAntigo: 89.9,
+      precoNovo: 44.9,
+      desconto: "50% OFF",
+      img: "https://via.placeholder.com/400x250?text=Chocolate+Especial",
+    },
+    {
+      id: 2,
+      nome: "Torta de Morango Premium",
+      precoAntigo: 99.9,
+      precoNovo: 59.9,
+      desconto: "40% OFF",
+      img: "https://via.placeholder.com/400x250?text=Torta+Morango",
+    },
+    {
+      id: 3,
+      nome: "Cheesecake de Frutas Vermelhas",
+      precoAntigo: 119.9,
+      precoNovo: 79.9,
+      desconto: "30% OFF",
+      img: "https://via.placeholder.com/400x250?text=Cheesecake",
+    },
+  ];
+
+  // 🔹 Lista de bolos normais
   const [bolos] = useState([
     { id: 1, nome: "Bolo de Chocolate", preco: 59.9, img: "https://via.placeholder.com/300x200?text=Chocolate" },
     { id: 2, nome: "Bolo de Morango", preco: 64.9, img: "https://via.placeholder.com/300x200?text=Morango" },
@@ -62,8 +91,16 @@ export default function Home() {
     navigate("/usuario");
   };
 
-   const handleHomelClick = () => {
+  const handleHomeClick = () => {
     navigate("/Home");
+  };
+
+  const handleAjudaClick = () => {
+    navigate("/Ajuda");
+  };
+
+  const handleProdutosClick = () => {
+    navigate("/produtos");
   };
 
   const addToCart = (bolo) => {
@@ -75,81 +112,103 @@ export default function Home() {
 
   const filteredBolos = bolos.filter((bolo) =>
     bolo.nome.toLowerCase().includes(search.toLowerCase())
-  );
+  )
 
   return (
 
     <div className="min-h-screen bg-[#f8f8f8] relative">
       
       <header className="bg-[#f8f8f8] shadow p-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center space-x-2">
-          <h1 className="text-2xl font-bold text-[#4B2E83]">Ju Doces</h1>
-          <button
-            className="sm:hidden p-2 rounded hover:bg-[#f8f8f8]"
-            onClick={() => setMenuOpen(true)}
-          >
-            <Menu size={26} />
-          </button>
-        </div>
+  {/* Botão menu mobile */}
+  <button
+    className="sm:hidden p-2 rounded hover:bg-[#f8f8f8]"
+    onClick={() => setMenuOpen(true)}
+  >
+    <Menu size={26} />
+  </button>
 
-        
-        <div className="hidden sm:flex items-center bg-[#ebdcdc] rounded-lg px-3 py-1 w-1/3">
-          <Search className="text-[#1f094a] mr-2" size={20} />
-          <input
-            type="text"
-            placeholder="Pesquisar bolo..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent outline-none w-full text-[##1f094a]"
-          />
-        </div>
+  {/* Logo */}
+  <div className="flex items-center space-x-2">
+    <h1 className="text-2xl font-bold text-[#4B2E83]">Ju Doces</h1>
+  </div>
 
+  {/* Barra de pesquisa */}
+  <div className="hidden sm:flex items-center bg-[#ebdcdc] rounded-lg px-3 py-1 w-1/3">
+    <Search className="text-[#1f094a] mr-2" size={20} />
+    <input
+      type="text"
+      placeholder="Pesquisar bolo..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="bg-transparent outline-none w-full text-[#1f094a]"
+    />
+  </div>
 
-        {!menuOpen && (
-          <div className="flex space-x-3 relative items-center">
-            <button
-              onClick={() => setShowMobileSearch((prev) => !prev)}
-              className="sm:hidden p-2 rounded-full hover:bg-[#ede9dc]"
-            >
-              <Search size={24} className="text-[#1f094a]" />
-            </button>
+  {/* Botões de ação */}
+  <div className="flex items-center space-x-3">
+    {/* Mobile search toggle */}
+    <button
+      onClick={() => setShowMobileSearch((prev) => !prev)}
+      className="sm:hidden p-2 rounded-full hover:bg-[#ede9dc]"
+    >
+      <Search size={24} className="text-[#1f094a]" />
+    </button>
 
-            <button onClick={handleCartClick} className="p-2 rounded-full hover:bg-[#ede9dc] relative">
-              <ShoppingCart size={24} className="text-[#1f094a]" />
-              {carrinhoCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#fb1111] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                  {carrinhoCount}
-                </span>
-              )}
-            </button>
-
-            {/* Perfil */}
-            <button onClick={handlePerfilClick} className="p-2 rounded-full hover:bg-[#ede9dc]">
-              <User size={24} className="text-[#1f094a]" />
-            </button>
-
-            {/* Logout */}
-            <button onClick={handleLogout} className="p-2 rounded-full hover:bg-[#ede9dc]">
-              <LogOut size={24} className="text-[#c40505]" />
-            </button>
-          </div>
-        )}
-      </header>
-
-      {/* Campo de busca mobile */}
-      {showMobileSearch && !menuOpen && (
-        <div className="sm:hidden px-4 py-2 bg-[#ede9dc] flex items-center animate-slide-down shadow">
-          <Search className="text-[#1f094a] mr-2" size={18} />
-          <input
-            type="text"
-            placeholder="Pesquisar bolo..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent outline-none w-full text-[#4B2E83]"
-            autoFocus
-          />
-        </div>
+    {/* Sempre visível */}
+    <button
+      onClick={handleCartClick}
+      className="p-2 rounded-full hover:bg-[#ede9dc] relative"
+    >
+      <ShoppingCart size={24} className="text-[#1f094a]" />
+      {carrinhoCount > 0 && (
+        <span className="absolute -top-1 -right-1 bg-[#fb1111] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+          {carrinhoCount}
+        </span>
       )}
+    </button>
+
+    {/* Apenas para telas maiores que 750px */}
+    <div className="hidden sm:flex space-x-2">
+      <button onClick={handlePerfilClick} className="p-2 rounded-full hover:bg-[#ede9dc]">
+        <User size={24} className="text-[#1f094a]" />
+      </button>
+      <button onClick={handleProdutosClick} className="p-2 rounded-full hover:bg-[#ede9dc]">
+        <Package size={24} className="text-[#1f094a]" />
+      </button>
+      <button onClick={handleAjudaClick} className="p-2 rounded-full hover:bg-[#ede9dc]">
+        <HelpCircle size={24} className="text-[#1f094a]" />
+      </button>
+      <button onClick={handleLogout} className="p-2 rounded-full hover:bg-[#ede9dc]">
+        <LogOut size={24} className="text-[#c40505]" />
+      </button>
+    </div>
+  </div>
+</header>
+
+
+{/* Campo de busca mobile */}
+{showMobileSearch && !menuOpen && (
+  <div className="sm:hidden px-4 py-2 bg-[#ede9dc] flex items-center animate-slide-down shadow">
+    <Search className="text-[#1f094a] mr-2" size={18} />
+    <input
+      type="text"
+      placeholder="Pesquisar bolo..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="bg-transparent outline-none w-full text-[#4B2E83]"
+      autoFocus
+    />
+  </div>
+)}
+
+  
+      <div className="text-center py-4 px-2 sm:px-4">
+        <h2 className="text-xl font-semibold text-[#4B2E83]">
+          Olá {nome}, aproveite as promoções!
+       </h2>
+        <p className="text-[#ffaac0]">{email}</p>
+      </div>
+    
 
       {/* Sidebar lateral */}
       {menuOpen && (
@@ -178,13 +237,13 @@ export default function Home() {
           </button>
 
            <button
-            onClick={handleHomelClick}
+            onClick={handleProdutosClick}
             className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3  font-semibold flex items-center justify-center"
           >
             Produtos
           </button>
            <button
-            onClick={handleHomelClick}
+            onClick={handleAjudaClick}
             className="w-full bg-[#ffaac0] hover:bg-[#ff7b7b] text-[#4B2E83] py-2 rounded-lg mb-3  font-semibold flex items-center justify-center"
           >
             Ajuda
@@ -205,46 +264,45 @@ export default function Home() {
         </div>
       )}
 
-      <div className="text-center py-4 px-2 sm:px-4">
-        <h2 className="text-xl font-semibold text-[#4B2E83]">
-          Olá {nome}, aproveite as promoções!
-       </h2>
-        <p className="text-[#ffaac0]">{email}</p>
-      </div>
-      
 
   <main className="p-6 flex flex-col items-center gap-8">
-  {bolos.length > 0 && (
-    <div className="w-[300px] h-[500px] bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-      <img
-        src="https://via.placeholder.com/400x250?text=Oferta+do+Dia"
-        alt="Oferta do Dia"
-        className="w-full h-1/2 object-cover"
-      />
-      <div className="p-4">
-        <h2 className="text-lg font-bold text-gray-800 mb-1">Oferta do Dia</h2>
-        <p className="text-sm text-gray-600 mb-1">{bolos[0].nome}</p>
-        <p className="text-xs text-gray-400 line-through">
-          R$ {(bolos[0].preco * 1.2).toFixed(2)}
-        </p>
-        <p className="text-xl font-bold text-green-700">
-          R$ {bolos[0].preco.toFixed(2)}
-        </p>
-        <p className="text-xs text-green-600">
-          {Math.round(((bolos[0].preco * 1.2 - bolos[0].preco) / (bolos[0].preco * 1.2)) * 100)}% OFF
-        </p>
-        <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
-        <button
-          onClick={() => addToCart(bolos[0])}
-          className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition"
-        >
-          Comprar Agora 🛒
-        </button>
-      </div>
-    </div>
-  )}
-</main>
-
+  <div className="w-full max-w-md mx-auto">
+  <Swiper
+    modules={[Pagination, Autoplay]}
+    autoplay={{ delay: 5000, disableOnInteraction: false }} 
+    loop={true} 
+  >
+    {ofertas.map((oferta) => (
+      <SwiperSlide key={oferta.id}>
+        <div className="w-[300px] h-[500px] bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mx-auto">
+          <img
+            src={oferta.img}
+            alt={oferta.nome}
+            className="w-full h-1/2 object-cover"
+          />
+          <div className="p-4">
+            <h2 className="text-lg font-bold text-gray-800 mb-1">Oferta do Dia</h2>
+            <p className="text-sm text-gray-600 mb-1">{oferta.nome}</p>
+            <p className="text-xs text-gray-400 line-through">
+              R$ {oferta.precoAntigo.toFixed(2)}
+            </p>
+            <p className="text-xl font-bold text-green-700">
+              R$ {oferta.precoNovo.toFixed(2)}
+            </p>
+            <p className="text-xs text-green-600">{oferta.desconto}</p>
+            <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
+            <button
+              onClick={() => addToCart(oferta)}
+              className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition"
+            >
+              Comprar Agora 🛒
+            </button>
+          </div>
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
 
                         
   <div className="w-full ml-2 mt-11">
@@ -252,7 +310,9 @@ export default function Home() {
     slidesPerView={1}
     spaceBetween={15}
     pagination={{ clickable: true }} 
-    modules={[Pagination]}
+    modules={[Pagination, Autoplay]}
+    autoplay={{ delay: 5000, disableOnInteraction: false }} 
+    loop={true}
     breakpoints={{
       640: { slidesPerView: 2 },
       768: { slidesPerView: 3 },
@@ -294,67 +354,68 @@ export default function Home() {
 </div> 
 
 
+{/* import { motion } from "framer-motion";      */}
+<div className="flex flex-wrap justify-center gap-6">
+  {filteredBolos.map((bolo, index) => {
+    const precoAntigo = bolo.preco * 1.2;
+    const desconto = Math.round(((precoAntigo - bolo.preco) / precoAntigo) * 100);
 
-       <div className="flex flex-wrap justify-center gap-6">
-          {filteredBolos.map((bolo) => {
-       const precoAntigo = bolo.preco * 1.2;
-        const desconto = Math.round(((precoAntigo - bolo.preco) / precoAntigo) * 100);
+    return (
+      <motion.div
+        key={bolo.id}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.05, duration: 0.4, ease: "easeOut" }}
+        whileHover={{ scale: 1.02, boxShadow: "0 6px 18px rgba(0,0,0,0.1)" }}
+        className="w-[300px] h-[400px] mt-8 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden flex flex-col"
+      >
+        {/* Imagem */}
+        <img
+          src={bolo.img}
+          alt={bolo.nome}
+          className="w-full h-1/2 object-cover"
+        />
 
-      return (
-        
-        <div
-          key={bolo.id}
-          className="w-[300px] h-[400px] mt-8 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden flex flex-col"
-        >
-          {/* Imagem */}
-          <img
-            src={bolo.img}
-            alt={bolo.nome}
-            className="w-full h-1/2 object-cover"
-          />
+        {/* Informações */}
+        <div className="p-3 flex flex-col flex-1">
+          <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-1">
+            {bolo.nome}
+          </h3>
 
-          {/* Informações */}
-          <div className="p-3 flex flex-col flex-1">
-            <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-1">
-              {bolo.nome}
-            </h3>
+          {/* Preços */}
+          <div className="mb-2">
+            <p className="text-xs text-gray-400 line-through">
+              R$ {precoAntigo.toFixed(2)}
+            </p>
+            <p className="text-lg font-bold text-green-700">
+              R$ {bolo.preco.toFixed(2)}
+            </p>
+            <p className="text-xs text-green-600">{desconto}% OFF</p>
+          </div>
 
-            {/* Preços */}
-            <div className="mb-2">
-              <p className="text-xs text-gray-400 line-through">
-                R$ {precoAntigo.toFixed(2)}
-              </p>
-              <p className="text-lg font-bold text-green-700">
-                R$ {bolo.preco.toFixed(2)}
-              </p>
-              <p className="text-xs text-green-600">{desconto}% OFF</p>
-            </div>
+          {/* Frete grátis */}
+          <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
 
-            {/* Frete grátis */}
-            <p className="text-xs text-green-600 font-medium mb-2">Frete grátis</p>
-
-            {/* Botão */}
-            <button
-              onClick={() => addToCart(bolo)}
-              className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition mt-auto"
-            >
-              Adicionar ao carrinho 🛒
-                  </button>
-                 </div>
-                  </div>
-               );
-             })}
-               </div>
-          
-
+          {/* Botão */}
+          <button
+            onClick={() => addToCart(bolo)}
+            className="w-full bg-[#ff7b7b] hover:bg-[#ff5a5a] text-white py-2 rounded-lg font-semibold shadow-sm transition mt-auto"
+          >
+            Adicionar ao carrinho 🛒
+          </button>
+        </div>
+      </motion.div>
+    );
+  })}
+</div>
+                   
+</main>
 
 
 
       {/* Seção de Contato */}
-      <footer className="bg-[#ffb2c5] p-6 flex flex-col items-center gap-4 mt-52 text-[#4B2E83]">
-        {/* <h2 className="text-xl font-bold mb-8 text-left">Contato</h2> */}
-       
-         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-left sm:text-left">
+      <footer className="bg-[#ffb2c5] p-6 flex flex-col items-center gap-4 mt-52 text-[#4B2E83]">   
+         <div className="grid grid-cols-1 text-center sm:grid-cols-4 gap-4  sm:text-left">
           <div>
             <p className="font-semibold">Telefone:</p>
             <p>(11) 99999-9999</p>
@@ -368,12 +429,12 @@ export default function Home() {
             <p>Rua das Flores, 123 - Barueri,SP</p>
           </div>
           <div>
-            <p className="font-semibold">Trabalhe Conosco:</p>
-            <p>envie seu currículo para rh@judoces.com</p>
+            <p className="font-semibold ">Trabalhe Conosco:</p>
+            <p className="cursor-pointer">envie seu currículo para <a href="mailto:rh@judoces.com">rh@judoces.com</a></p>
           </div>
           <br />
          </div>
-         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 text-left sm:text-left">
+         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 text-center sm:text-left">
           <a href="#sobre" className="hover:text-[#ff7b7b] transition">Sobre</a>
           <a href="/Home" className="hover:text-[#ff7b7b] transition">Produtos</a>
          </div>
